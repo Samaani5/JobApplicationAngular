@@ -1,0 +1,193 @@
+@font-face {
+    font-family: 'Outfit';
+    src: url('/assets/fonts/Outfit-Black.eot');
+    src: url('/assets/fonts/Outfit-Black.eot?#iefix') format('embedded-opentype'),
+        url('/assets/fonts/Outfit-Black.woff2') format('woff2'),
+        url('/assets/fonts/Outfit-Black.woff') format('woff'),
+        url('/assets/fonts/Outfit-Black.ttf') format('truetype'),
+        url('/assets/fonts/Outfit-Black.svg#Outfit-Black') format('svg');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Outfit';
+    src: url('/assets/fonts/Outfit-Bold.eot');
+    src: url('/assets/fonts/Outfit-Bold.eot?#iefix') format('embedded-opentype'),
+        url('/assets/fonts/Outfit-Bold.woff2') format('woff2'),
+        url('/assets/fonts/Outfit-Bold.woff') format('woff'),
+        url('/assets/fonts/Outfit-Bold.ttf') format('truetype'),
+        url('/assets/fonts/Outfit-Bold.svg#Outfit-Bold') format('svg');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Outfit';
+    src: url('/assets/fonts/Outfit-ExtraLight.eot');
+    src: url('/assets/fonts/Outfit-ExtraLight.eot?#iefix') format('embedded-opentype'),
+        url('/assets/fonts/Outfit-ExtraLight.woff2') format('woff2'),
+        url('/assets/fonts/Outfit-ExtraLight.woff') format('woff'),
+        url('/assets/fonts/Outfit-ExtraLight.ttf') format('truetype'),
+        url('/assets/fonts/Outfit-ExtraLight.svg#Outfit-ExtraLight') format('svg');
+    font-weight: 200;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Outfit';
+    src: url('/assets/fonts/Outfit-Light.eot');
+    src: url('/assets/fonts/Outfit-Light.eot?#iefix') format('embedded-opentype'),
+        url('/assets/fonts/Outfit-Light.woff2') format('woff2'),
+        url('/assets/fonts/Outfit-Light.woff') format('woff'),
+        url('/assets/fonts/Outfit-Light.ttf') format('truetype'),
+        url('/assets/fonts/Outfit-Light.svg#Outfit-Light') format('svg');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Outfit';
+    src: url('/assets/fonts/Outfit-ExtraBold.eot');
+    src: url('/assets/fonts/Outfit-ExtraBold.eot?#iefix') format('embedded-opentype'),
+        url('/assets/fonts/Outfit-ExtraBold.woff2') format('woff2'),
+        url('/assets/fonts/Outfit-ExtraBold.woff') format('woff'),
+        url('/assets/fonts/Outfit-ExtraBold.ttf') format('truetype'),
+        url('/assets/fonts/Outfit-ExtraBold.svg#Outfit-ExtraBold') format('svg');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Outfit';
+    src: url('/assets/fonts/Outfit-Medium.eot');
+    src: url('/assets/fonts/Outfit-Medium.eot?#iefix') format('embedded-opentype'),
+        url('/assets/fonts/Outfit-Medium.woff2') format('woff2'),
+        url('/assets/fonts/Outfit-Medium.woff') format('woff'),
+        url('/assets/fonts/Outfit-Medium.ttf') format('truetype'),
+        url('/assets/fonts/Outfit-Medium.svg#Outfit-Medium') format('svg');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Outfit';
+    src: url('/assets/fonts/Outfit-Thin.eot');
+    src: url('/assets/fonts/Outfit-Thin.eot?#iefix') format('embedded-opentype'),
+        url('/assets/fonts/Outfit-Thin.woff2') format('woff2'),
+        url('/assets/fonts/Outfit-Thin.woff') format('woff'),
+        url('/assets/fonts/Outfit-Thin.ttf') format('truetype'),
+        url('/assets/fonts/Outfit-Thin.svg#Outfit-Thin') format('svg');
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Outfit';
+    src: url('/assets/fonts/Outfit-Regular.eot');
+    src: url('/assets/fonts/Outfit-Regular.eot?#iefix') format('embedded-opentype'),
+        url('/assets/fonts/Outfit-Regular.woff2') format('woff2'),
+        url('/assets/fonts/Outfit-Regular.woff') format('woff'),
+        url('/assets/fonts/Outfit-Regular.ttf') format('truetype'),
+        url('/assets/fonts/Outfit-Regular.svg#Outfit-Regular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Outfit';
+    src: url('/assets/fonts/Outfit-SemiBold.eot');
+    src: url('/assets/fonts/Outfit-SemiBold.eot?#iefix') format('embedded-opentype'),
+        url('/assets/fonts/Outfit-SemiBold.woff2') format('woff2'),
+        url('/assets/fonts/Outfit-SemiBold.woff') format('woff'),
+        url('/assets/fonts/Outfit-SemiBold.ttf') format('truetype'),
+        url('/assets/fonts/Outfit-SemiBold.svg#Outfit-SemiBold') format('svg');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* body {
+    background-color: #171C49;
+    color: #333;
+} */
+
+.form-section {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 30px;
+    margin: 20px 0;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.form-title {
+    font-family: 'Outfit';
+    font-size: 26px;
+    font-weight: 500;
+    line-height: 31.2px;
+    color: #000000;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #000;
+    padding-bottom: 10px;
+}
+
+.form-label-readonly {
+    font-family: 'Outfit'; 
+    padding: 15px 12px;
+    display: block;
+    background-color: #EFF3FF;
+    border: 1px solid #CFD9F6;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    color: #161613;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: normal;
+
+}
+h1.heading_apply_for_job.text-center.my-4 {
+    font-family: 'Outfit'; 
+    font-size: 50px;
+    font-weight: 600;
+    line-height: 63px;
+    letter-spacing: -1.399999976158142px;
+    text-align: center;
+    color: #fff;
+}
+.avatar-upload img {
+    display: block;
+    width: 50px;
+    height: 50px;
+}
+.form-section .form-label{
+    font-family: 'Outfit'; 
+    font-size: 16px;
+    font-weight: 400;
+    line-height: normal;
+    text-align: left;
+}
+.form-section-with-bg {
+    background: #EFF3FF;
+    padding: 19px 18px 19px 18px;
+    border-radius: 6px;
+    border: 1px solid #E6E8F0;
+    box-shadow: 0px 1px 1px 0px #3036510F;
+    margin-bottom: 20px;
+}
+.form-section-without-bg {
+    margin-bottom: 50px;
+}
+.heightDiv {
+  min-height: 51px;
+}
+.form-label {
+  font-size: 1.5rem;
+}

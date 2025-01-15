@@ -1,0 +1,85 @@
+<section class="bg-blue">
+  <div class="container">
+    <div class="row">
+      <div class="add-a-job-box">
+        <h2 class="text-center">Current Openings</h2><hr />
+        <div class="job-category-selection row" style="font-weight:bold; font-size:14px;">
+          <label class="col-lg-3 p-0 text-center" *ngFor="let item of GroupDivisionList">
+            <input type="radio" name="jobCategory" [value]="item.divisionId" (click)="showOptions(item.divisionId, item.name)"> {{ item.name }}
+          </label>
+        </div>
+        <!--<div id="photoBillingOptions" class="category-options mb-3 row" *ngIf="designationShow">
+          <div class="col-sm-12">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Position</th>
+                  <th>Location</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="designationTableBody">
+                <ng-container *ngFor="let designation of DesignationList">
+                  <tr>
+                    <td>{{ designation.designationName }}</td>
+                    <td>
+                      <select class="form-control" [(ngModel)]="designation.selectedLocation">
+                        <ng-container *ngFor="let item of LocationList">
+                          <option [value]="item.locationId">
+                            {{ item.location }}
+                          </option>
+                        </ng-container>
+                      </select>
+                    </td>
+                    <td style="text-align:end">
+                      <button class="submit_btn"
+                              (click)="redirectToSendOTP(designation.designationId, designation.designationName, designation.selectedLocation)">
+                        Apply
+                      </button>
+                    </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </div>-->
+        <section class="job-vacancy-list bg-light py-4" *ngIf="ITOilShow" style="background-color: white !important;">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-6 col-lg-12 mb-4" *ngFor="let job of vacancy; let i = index">
+                <div class="card shadow-sm">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-md-10"><h6 class="card-title">{{ job.jobName }}</h6></div>
+                      <div class="col-md-2">
+                        <select class="form-control"  [(ngModel)]="job.selectedLocation">
+                          <ng-container *ngFor="let item of job.vacancyLocations">
+                            <option [value]="item.locationId">
+                              {{ item.location }}
+                            </option>
+                          </ng-container>
+                        </select>
+                      </div>
+                    </div>
+                    <p class="card-text row">
+                      <span class="col-sm-6" *ngIf="job.projectName!=null"><strong><i class="entypo-archive"></i></strong> {{job.projectName}}</span>
+                      <span class="col-sm-6"><strong><i class="entypo-bag"></i></strong> {{ job.experienceFrom }} - {{ job.experienceTo }} years</span><br />
+                      <span><strong><i class="entypo-key"></i></strong> {{ job.keySkills }}</span><br />
+                      <span class="d-flex"><strong><i class="entypo-book-open"></i></strong> <span [innerHTML]="job.jobDescription"></span></span><br />
+                    </p>
+                    <div class="col-md-12 text-end">
+                      <button class="submit_btn" (click)="redirectToSendOTP(job.positionId, job.jobName, job.selectedLocation, job.projectName, job.projectId, i )">
+                        Apply
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+</section>

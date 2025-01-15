@@ -1,0 +1,84 @@
+.breadcrumb {
+    background-color: #f8f9fa; /* Light gray background */
+    padding: 10px 15px;
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  }
+  
+  .breadcrumb-item a {
+    text-decoration: none;
+    color: #007bff;
+  }
+  
+    .breadcrumb-item a:hover {
+      text-decoration: underline;
+    }
+  
+  .search-bar {
+    margin: 20px 0;
+  }
+  
+  .form-container {
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  .form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+    .form-group label {
+      min-width: 115px; /* Fixed width for label */
+      margin-right: 20px; /* Space between label and input */
+    }
+  
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      flex: 1; /* Input stretches to fill remaining space */
+    }
+  
+  .form-select {
+    font-size: 1.5rem;
+  }
+  
+  .form-label {
+    font-size: 1.5rem;
+    font-weight: 500;
+  }
+  
+  .form-control {
+    font-size: 1.5rem;
+  }
+  
+  .breadcrumb-bar {
+    background-color: #f8f9fa;
+    padding: 10px 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .breadcrumb {
+    background-color: unset;
+    padding: 0px;
+    border-radius: 0px;
+    box-shadow: none;
+    margin: 0;
+  }
+  .table {
+    font-size: 12px;
+  }
+  @media screen and (max-width: 767px) {
+    .table {
+      font-size: 9px;
+    }
+    .table tbody tr td{
+        white-space:break-spaces;
+    }
+  }
+  
+  

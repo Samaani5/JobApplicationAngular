@@ -1,0 +1,51 @@
+<div class="container-fluid">
+  <div class="row mt-4 mb-5 g-3 align-items-center">
+    <!-- Row for Items per Page and Pagination -->
+    <div class="col-12 d-flex justify-content-between align-items-center">
+      <div class="Showing-entries mt-4 btn-font">
+        Items per Page:
+        <select class="form-select form-select-sm d-inline-block w-auto btn-font" (change)="handlePageSizeChange($event)">
+          <option *ngFor="let size of pageSizes" value="{{size}}">
+            {{ size }}
+          </option>
+        </select>
+      </div>
+      <div class="page">
+        <ul class="pagination mb-0" style="display: flex; gap: 5px;">
+          <li class="page-item">
+            <button 
+              class="page-link previous-btn btn-font" 
+              (click)="changePage(currentPage - 1)" 
+              [disabled]="currentPage === 1">
+              Previous
+            </button>
+          </li>
+          <li class="page-item" *ngFor="let page of visiblePages">
+            <button 
+              class="page-link btn-font" 
+              style="border-radius: 0;" 
+              (click)="changePage(page)" 
+              [class.active]="currentPage === page">
+              {{ page }}
+            </button>
+          </li>
+          <li class="page-item">
+            <button 
+              class="page-link next-btn" 
+              style="font-size: 10px;" 
+              (click)="changePage(currentPage + 1)" 
+              [disabled]="currentPage === totalPages">
+              Next
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!-- Row for Showing Entries -->
+    <div class="col-12 d-flex justify-content-end pe-3">
+      <div class="Showing-entries" style="font-size: 10px;">
+        Showing {{showingItems}} out of {{totalItems}} entries
+      </div>
+    </div>
+  </div>
+</div>

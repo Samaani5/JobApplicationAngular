@@ -1,1 +1,361 @@
-/* You can add global styles to this file, and also import other style files */
+body {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  margin: 0;
+  font-size: 14px;
+}
+
+.navbar-expand-lg .navbar-nav .nav-link {
+  color: #fff;
+  font-weight: 700;
+}
+
+  .navbar-expand-lg .navbar-nav .nav-link:hover {
+    color: #cfcfcf;
+  }
+
+.header-bg {
+  background-color: #151c48 !important;
+}
+
+a.btn.add-job-btn {
+  font-weight: 700;
+  background: #f0b555;
+  border: 1px solid #f0b555;
+  color: #151e46;
+}
+
+  a.btn.add-job-btn:hover {
+    font-weight: 700;
+    background: #151e46;
+    border: 1px solid #efb45e;
+    color: #efb45e;
+  }
+
+.bg-blue {
+  background-color: #151c48 !important;
+  min-height: 80vh;
+}
+
+.height-70vh {
+  height: 70vh;
+}
+
+  .height-70vh h2 {
+    font-size: 30px;
+    font-weight: 600;
+    font-family: "Poppins", sans-serif;
+    line-height: normal;
+  }
+
+  .height-70vh p {
+    line-height: normal;
+    font-size: 1.25rem !important;
+    margin: 0;
+    font-weight: 300;
+  }
+
+section.bg-blue {
+  padding: 100px 0px;
+}
+
+.add-a-job-box {
+  max-width: 70.6667%;
+  width: 100%;
+  margin: 0 auto;
+  box-shadow: 0px 2px 4px 0px rgba(17, 17, 17, 0.04), 0px 8px 32px 0px rgba(33, 33, 33, 0.08) !important;
+  background: #fff;
+  border-radius: 1rem !important;
+  border-color: #eaeced !important;
+  border-width: 0px !important;
+  border-style: none;
+  padding: 2.5rem !important;
+}
+.submit_btn {
+  font-weight: 700;
+  background: #151e46;
+  border: 1px solid #efb45e;
+  color: #efb45e;
+  padding: 5px 10px;
+  border-radius: 0.5rem;
+  max-width: 150px;
+  width: 100%;
+  transition: background-color .3s, opacity .5s, visibility .5s;
+}
+
+  .submit_btn:hover {
+    background: transparent;
+    color: #151e46;
+  }
+
+.add-a-job-box .col-form-label {
+  font-size: 13px;
+}
+
+.add-a-job-box .form-select {
+  font-size: 14px;
+}
+
+.add-a-job-box .form-control {
+  font-size: 14px;
+}
+
+@media all and (max-width: 580px) {
+  button.subscribe_btn {
+    padding: 16px 31px 16px 31px;
+    border-radius: 50px;
+    border: 1px solid rgba(34, 34, 34, 1);
+    background: rgba(92, 66, 255, 1);
+    font-family: "Poppins", sans-serif;
+    font-size: 13.24px;
+    font-weight: 600;
+    line-height: 22px;
+    text-align: center;
+    color: rgba(255, 255, 255, 1);
+    position: relative !important;
+    right: 0px;
+    top: 15px !important;
+    width: 100% !important;
+  }
+}
+
+@media all and (max-width: 768px) {
+  .copyright-section p {
+    text-align: left !important;
+    margin-top: 10px !important
+  }
+
+  .add-a-job-box {
+    max-width: 94.6667% !important;
+    padding: 1rem !important;
+  }
+}
+
+@media all and (max-width: 991px) {
+  #scroll_button {
+    right: 5px !important;
+  }
+}
+
+@media all and (min-width: 992px) {
+}
+
+
+
+footer {
+  position: relative;
+  padding: 50px 0;
+  background: linear-gradient(0deg, #FFFFFF, #FFFFFF), linear-gradient(0deg, #FFFFFF, #FFFFFF);
+}
+
+  footer h5 {
+    font-family: "Poppins", sans-serif;
+    font-size: 18.59px;
+    font-weight: 500;
+    line-height: 26px;
+    text-align: left;
+    color: rgba(34, 34, 34, 1);
+    margin-bottom: 20px;
+  }
+
+  footer ul li a {
+    font-family: "Poppins", sans-serif;
+    font-size: 15.13px;
+    font-weight: 400;
+    line-height: 30px;
+    text-align: left;
+    color: rgba(102, 102, 102, 1);
+    text-decoration: none;
+  }
+
+  footer ul {
+    list-style: none;
+    padding-left: 0px;
+  }
+
+  footer p {
+    font-family: "Poppins", sans-serif;
+    font-size: 14.63px;
+    font-weight: 400;
+    line-height: 26px;
+    text-align: left;
+    color: rgba(102, 102, 102, 1);
+  }
+
+  footer input.form-control {
+    padding: 16px 0px 15px 24px;
+    border-radius: 50px;
+    background: rgba(241, 242, 248, 1);
+  }
+
+button.subscribe_btn {
+  padding: 16px 31px 16px 31px;
+  border-radius: 50px;
+  border: 1px solid rgba(34, 34, 34, 1);
+  background: rgba(92, 66, 255, 1);
+  font-family: "Poppins", sans-serif;
+  font-size: 13.24px;
+  font-weight: 600;
+  line-height: 22px;
+  text-align: center;
+  color: rgba(255, 255, 255, 1);
+  position: absolute;
+  right: 0px;
+  top: 0;
+}
+
+  button.subscribe_btn img {
+    padding-left: 13px;
+  }
+
+.copyright-section {
+  padding: 20px 0px 20px 0px;
+  border-top: 1px solid rgba(34, 34, 34, 0.1);
+}
+
+ul.social-media-list {
+  display: flex;
+  list-style: none;
+  gap: 12px;
+  padding-left: 0;
+  margin: 0;
+}
+
+  ul.social-media-list li {
+    width: 45px;
+    height: 45px;
+    border-radius: 22.5px;
+    background: rgba(241, 242, 248, 1);
+    -webkit-border-radius: 22.5px;
+    -moz-border-radius: 22.5px;
+    -ms-border-radius: 22.5px;
+    -o-border-radius: 22.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+ul.payment-cart-list {
+  display: flex;
+  list-style: none;
+  gap: 12px;
+  padding-left: 0;
+  flex-wrap: wrap;
+}
+
+.copyright-section p {
+  font-family: "Poppins", sans-serif;
+  font-size: 13.02px;
+  font-weight: 400;
+  line-height: 22.75px;
+  text-align: right;
+  color: rgba(102, 102, 102, 1);
+  margin: 0;
+}
+
+#scroll_button.show {
+  visibility: visible;
+  opacity: 1;
+}
+
+#scroll_button {
+  display: inline-block;
+  text-align: center;
+  border-radius: 4px;
+  position: fixed;
+  right: 30px;
+  opacity: 0;
+  visibility: hidden;
+}
+
+#scroll_button {
+  padding: 1px 0px 1px 0px;
+  border-radius: 22px;
+  background-color: #ffffff;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(226, 224, 224, 1);
+  transition: background-color .3s, opacity .5s, visibility .5s;
+  z-index: 1000;
+  -webkit-border-radius: 22px;
+  -moz-border-radius: 22px;
+  -ms-border-radius: 22px;
+  -o-border-radius: 22px;
+  bottom: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  right: 10px;
+}
+
+.slider .slick-slide:hover img {
+  transform: scale(1.1);
+}
+
+.slider .slick-slide img {
+  -webkit-transition: all 3.5s ease 0s;
+  -o-transition: all 3.5s ease 0s;
+  transition: all 3.5s ease 0s;
+}
+
+.trading-demand-box:hover img {
+  transform: scale(1.1);
+}
+
+.trading-demand-box img {
+  -webkit-transition: all 3.5s ease 0s;
+  -o-transition: all 3.5s ease 0s;
+  transition: all 3.5s ease 0s;
+}
+
+a.all_shop_btn:hover {
+  color: #fff;
+  background: #5a4cfa;
+}
+
+a.all_shop_btn {
+  transition: all 0.2s ease 0s;
+  -webkit-transition: all 0.2s ease 0s;
+  -moz-transition: all 0.2s ease 0s;
+  -ms-transition: all 0.2s ease 0s;
+  -o-transition: all 0.2s ease 0s;
+}
+
+  a.all_shop_btn .with-hover {
+    display: none;
+  }
+
+  a.all_shop_btn:hover .with-hover {
+    display: inline-block;
+  }
+
+  a.all_shop_btn:hover .without-hover {
+    display: none;
+  }
+
+button.subscribe_btn {
+  transition: all 0.2s ease 0s;
+}
+
+  button.subscribe_btn .with-hover {
+    display: none;
+  }
+
+  button.subscribe_btn:hover .with-hover {
+    display: inline-block;
+  }
+
+  button.subscribe_btn:hover .without-hover {
+    display: none;
+  }
+
+  button.subscribe_btn:hover {
+    background: rgb(255 255 255);
+    color: rgb(0 0 0);
+  }
+
+
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

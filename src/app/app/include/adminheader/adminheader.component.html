@@ -1,0 +1,93 @@
+  <div class="sidebar-menu-inner">
+  <header class="logo-env">
+    <!-- logo -->
+    <div class="logo">
+      <a href="javascript:void(0)">
+        <img src="assets/images/data-logo.svg" width="100" alt="">
+      </a>
+    </div>
+    <!-- logo collapse icon -->
+    <div class="sidebar-collapse">
+      <a href="javascript:void(0)" (click)="toggleSidebar()" class="sidebar-collapse-icon">
+        <!-- add class "with-animation" if you want sidebar to have animation during expanding/collapsing transition -->
+        <i class="entypo-menu"></i>
+      </a>
+    </div>
+    <!-- open/close menu icon (do not remove if you want to enable menu on mobile devices) -->
+    <div class="sidebar-mobile-menu visible-xs">
+      <a href="javascript:void(0)" class="with-animation" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <!-- add class "with-animation" to support animation -->
+        <i class="entypo-menu"></i>
+      </a>
+    </div>
+  </header>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul id="main-menu" class="main-menu">
+      <li class="root-level">
+        <a href="/admin">
+          <i class="entypo-gauge"></i>
+          <span class="title">Dashboard</span>
+        </a>
+      </li>
+      <li class="root-level">
+        <a href="/admin/applicant-list">
+          <i class="entypo-layout"></i>
+          <span class="title">Applicant List</span>
+        </a>
+      </li>
+      <li class="root-level">
+        <a href="/admin/add-vacancy">
+          <i class="entypo-monitor"></i>
+          <span class="title">Add Job</span>
+        </a>
+      </li>
+      <li class="root-level">
+        <a href="/admin/verify-employee">
+          <i class="entypo-users"></i>
+          <span class="title">Verify-Applicant</span>
+        </a>
+      </li>
+      <li class="root-level">
+        <a href="/admin/post-vacancy-list">
+          <i class="entypo-list"></i>
+          <span class="title">Vacancy List</span>
+        </a>
+      </li>
+      <li class="root-level dropdown">
+        <a href="" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="entypo-list"></i>
+          <span class="title">Masters</span>
+        </a>
+        <ul class="dropdown-menu">
+          <li>
+            <a href="/admin/group-division-list">Group Division List</a>
+          </li>
+          <li>
+            <a href="/admin/add-group-division">Add Group Division</a>
+          </li>
+          <li>
+            <a href="/admin/zone-list">Zone List</a>
+          </li>
+          <li>
+            <a href="/admin/add-zone">Add Zone</a>
+          </li>
+          <li>
+            <a href="/admin/project-list">Project List</a>
+          </li>
+          <li>
+            <a href="/admin/add-project">Add Project</a>
+          </li>
+          <li>
+            <a href="/admin/designation-list">Designation List</a>
+          </li>
+          <li>
+            <a href="/admin/add-designation">Add Designation</a>
+          </li>
+          <li>
+            <a href="/admin/sub-division-list">Sub Division List</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+    </div>
+  </div>

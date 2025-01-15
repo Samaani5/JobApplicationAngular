@@ -1,0 +1,628 @@
+<div class="mt-4">
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb" class="d-flex justify-content-between align-items-center breadcrumb-bar">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/admin">{{groupname}}</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Employee List</li>
+    </ol>
+    <!--<button class="btn btn-primary ms-2" [routerLink]="'/admin/verify-employee'">Verify Employee</button>-->
+  </nav>
+
+
+  <!-- Form -->
+  <div class="form-container">
+    <form (ngSubmit)="onSubmit()">
+      <div class="row">
+        <!-- Left Column -->
+        <div class="col-md-6">
+          <div class="form-group mb-3">
+            <label for="groupDivision" class="form-label">Group Division</label>
+            <select class="form-select"
+                    [(ngModel)]="formData.groupDivision"
+                    name="groupDivision"
+                    (change)="showOptions(formData.groupDivision)"
+                    required>
+              <option value="0" selected disabled>Select Group Division</option>
+              <option *ngFor="let item of GroupDivisionList" [value]="item.divisionId">{{ item.name }}</option>
+            </select>
+          </div>
+          <div class="form-group mb-3">
+            <label for="sub-division" class="form-label">Location</label>
+            <select class="form-select"
+                    [(ngModel)]="formData.subDivision"
+                    name="subDivision"
+                    required>
+              <option value="" selected disabled>Choose Location</option>
+              <option *ngFor="let item of subDivisions" [value]="item.id">{{ item.name }}</option>
+            </select>
+          </div>
+          <div class="form-group mb-3">
+            <label for="designation" class="form-label">Designation</label>
+            <select class="form-select"
+                    [(ngModel)]="formData.designation"
+                    name="designation"
+                    required>
+              <option value="" selected disabled>Select Designation</option>
+              <option *ngFor="let designation of DesignationList" [value]="designation.designationId">{{ designation.designationName }}</option>
+            </select>
+          </div>
+          <div class="form-group mb-3">
+            <label for="datepicker" class="form-label">From Date</label>
+            <div class="input-group" style="display: flex">
+              <input type="text"
+                     class="form-control"
+                     id="datepicker"
+                     [(ngModel)]="formData.fromDate"
+                     name="fromDate"
+                     placeholder="dd/mm/yyyy"
+                     required />
+              <span class="input-group-text">
+                <i class="entypo-calendar"></i>
+              </span>
+            </div>
+          </div>
+          <div class="form-group mb-3">
+            <label for="experienceFrom" class="form-label">Experience From</label>
+            <input type="number"
+                   class="form-control"
+                   placeholder="Enter Experience"
+                   [(ngModel)]="formData.experienceFrom"
+                   name="experienceFrom"
+                   aria-label="Search" />
+          </div>
+          <div class="form-group mb-3">
+            <label for="keyskill" class="form-label">Key Skill</label>
+            <input type="text"
+                   class="form-control"
+                   placeholder="e.g., Angular, TypeScript, HTML, CSS"
+                   [(ngModel)]="formData.keyskill"
+                   name="keyskill"
+                   aria-label="Search" />
+          </div>
+        </div>
+        <!-- Right Column -->
+        <div class="col-md-6">
+          <div class="form-group mb-3">
+            <label for="zone" class="form-label">Zone</label>
+            <select class="form-select"
+                    [(ngModel)]="formData.zone"
+                    name="zone"
+                    (change)="GetSubDivision(formData.zone)"
+                    required>
+              <option value="" selected disabled>Select Zone</option>
+              <option *ngFor="let item of LocationList" [value]="item.locationId">{{ item.location }}</option>
+            </select>
+          </div>
+          <div class="form-group mb-3">
+            <label for="status" class="form-label">Status</label>
+            <select class="form-select"
+                    [(ngModel)]="formData.status"
+                    name="status"
+                    required>
+              <option value="" selected disabled>Select Status</option>
+              <option *ngFor="let item of StatusList" [value]="item.id">{{ item.name }}</option>
+            </select>
+          </div>
+          <div class="form-group mb-3">
+            <label for="project" class="form-label">Project</label>
+            <select class="form-select"
+                    [(ngModel)]="formData.project"
+                    name="project"
+                    required>
+              <option value="" selected disabled>Select Project Name</option>
+              <option *ngFor="let item of ProjectList" [value]="item.projectId">{{ item.projectName }}</option>
+            </select>
+          </div>
+          <div class="form-group mb-3">
+            <label for="datepicker1" class="form-label">To Date</label>
+            <div class="input-group" style="display: flex">
+              <input type="text"
+                     class="form-control"
+                     id="datepicker1"
+                     [(ngModel)]="formData.toDate"
+                     name="toDate"
+                     placeholder="dd/mm/yyyy"
+                     required />
+              <span class="input-group-text">
+                <i class="entypo-calendar"></i>
+              </span>
+            </div>
+          </div>
+          <div class="form-group mb-3">
+            <label for="experienceTo" class="form-label">Experience To</label>
+            <input type="number"
+                   class="form-control"
+                   placeholder="Enter Experience"
+                   [(ngModel)]="formData.experienceTo"
+                   name="experienceTo"
+                   aria-label="Search" />
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <!-- Search Bar -->
+        <div class="search-bar d-flex justify-content-between">
+          <div class="col-md-4">
+            <label for="zone" class="form-label">Count</label>
+          </div>
+          <div class="col-md-4 text-center">
+            <button class="btn btn-primary ms-2" type="submit">View</button>
+          </div>
+          <div class="col-md-4">
+            <input type="text"
+                   class="form-control"
+                   placeholder="Search here..."
+                   [(ngModel)]="formData.searchQuery"
+                   name="searchQuery"
+                   aria-label="Search" />
+          </div>
+        </div>
+      </div>
+    </form>
+    <hr />
+    <div class="row" *ngIf="applicantList.length>0">
+      <div class="col-md-12">
+        <div class="table-responsive">
+          <table class="table table-bordered responsive" style="font-size: 12px;">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Gender</th>
+                <th>DOB</th>
+                <th>Age</th>
+                <th>Email Address</th>
+                <th>Mobile No</th>
+                <th>Father Mobile No</th>
+                <th>Revenue Town</th>
+                <th>Designation Name</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of paginatedApplicantList; let i = index">
+                <td>{{ (currentPage - 1) * itemsPerPage + i + 1 }}</td>
+                <td>
+                  <ng-container *ngIf="groupid === 1; else defaultTemplate">
+                    <a (click)="showDetail(item.mobileNo)" style="color: rgb(13 110 253); cursor: pointer;">
+                      {{item.name}}
+                    </a>
+                  </ng-container>
+                  <ng-template #defaultTemplate>
+                    {{item.name}}
+                  </ng-template>
+                </td>
+                <td>{{item.gender}}</td>
+                <td>{{item.dateOfBirth | date:'dd/MM/yyyy'}}</td>
+                <td>{{item.age}}</td>
+                <td>{{item.emailAddress}}</td>
+                <td>{{item.mobileNo}}</td>
+                <td>{{item.fatherMobileNo}}</td>
+                <td>{{item.revenueTown}}</td>
+                <td>{{item.designationName}}</td>
+                <td [title]="item.statusName+' by '+item.createdBy" style="cursor:pointer">{{item.statusName}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <app-pagination [currentPage]="currentPage"
+                        [itemsPerPage]="itemsPerPage"
+                        [totalItems]="totalItems"
+                        [totalPages]="totalPages"
+                        (pageChanged)="onPageChange($event)"
+                        (pagesizeChanged)="onPagesizeChange($event)">
+        </app-pagination>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" #detailmodal id="detailmodal" tabindex="-1" aria-labelledby="patternModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="detailsModalLabel">Applicant Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body fs-4">
+        <div class="mt-4">
+          <form [formGroup]="jobApplicationForm">
+            <div class="form-container">
+              <div class="form-section-without-bg">
+                Personal Details Section
+                <div class="form-title">
+                  <img src="assets\images\icons\clarity_employee_line.svg">
+                  Employee Personal Details
+                </div>
+                <div class="row g-3" *ngIf="employeeData">
+                  <div class="col-md-4">
+                    <label class="form-label">Full Name</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.name}}</div>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">Father's Name</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.fatherName}}</div>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">Father's Mobile No</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.fatherMobileNo}}</div>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">Nationality</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.nationality}}</div>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">Date of Birth</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.dateOfBirth | date:'dd-MM-yyyy'}}</div>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">Gender</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.gender}}</div>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">Marital Status</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.maritalStatus}}</div>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">Email Address</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.emailAddress}}</div>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">Mobile No</label>
+                    <div class="form-label-readonly heightDiv">{{MobileNo}}</div>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">Vehicle Type</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.vehicleType}}</div>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">Driving Licence No</label>
+                    <div class="form-label-readonly heightDiv heightDiv">{{employeeData.drivingLicenseNo}}</div>
+                  </div>
+                  <div class="col-md-4 avatar-upload">
+                    <label class="form-label">Upload Face Photo</label>
+                    <img src={{employeeData.passportPhotoFilePath}} alt="Avatar">
+                  </div>
+                </div>
+              </div>
+              Skills Section
+              <div class="form-title">
+                <img src="assets\images\icons\skill.svg">
+                Skills
+              </div>
+              <div *ngFor="let skill of employeeData.skillDetails" class="form-section-with-bg">
+                <div class="row g-3">
+                  <div class="col-md-3">
+                    <label class="form-label">Skill / Software Name *</label>
+                    <div class="form-label-readonly heightDiv bg-white">{{skill.skillName}}</div>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Software Version</label>
+                    <div class="form-label-readonly heightDiv bg-white">{{skill.softwareVerson}}</div>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Last Used</label>
+                    <div class="form-label-readonly heightDiv bg-white">{{skill.lastUsed}}</div>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Experience</label>
+                    <div class="form-label-readonly heightDiv bg-white">{{skill.experienceYear + '.' + skill.experienceMonth + ' Yr'}}</div>
+                  </div>
+                </div>
+              </div>
+
+              Address Details
+              <div class="form-title">
+                <img src="assets\images\icons\location.svg">
+                Address Details
+              </div>
+              <div class="form-section-without-bg">
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label">Permanent Address</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.permanentAddress}}</div>
+                  </div>
+                  <div class="col-md-2">
+                    <label class="form-label">Pincode</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.pinCode}}</div>
+                  </div>
+                  <div class="col-md-2">
+                    <label class="form-label">State</label>
+                    <div class="form-label-readonly heightDiv">
+                      <ng-container *ngFor="let state of states">
+                        <span *ngIf="state.id === employeeData.stateId">{{ state.name }}</span>
+                      </ng-container>
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <label class="form-label">District</label>
+                    <div class="form-label-readonly heightDiv">
+                      <ng-container *ngFor="let district of districtsForState">
+                        <span *ngIf="district.id === employeeData.districtId">{{ district.name }}</span>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label">Correspondence Address</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.correspondenceAddress}}</div>
+                  </div>
+                  <div class="col-md-2">
+                    <label class="form-label">Pincode</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.cPinCode}}</div>
+                  </div>
+                  <div class="col-md-2">
+                    <label class="form-label">State</label>
+                    <div class="form-label-readonly heightDiv">
+                      <ng-container *ngFor="let state of states">
+                        <span *ngIf="state.id === employeeData.cStateId">{{ state.name }}</span>
+                      </ng-container>
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <label class="form-label">District</label>
+                    <div class="form-label-readonly heightDiv">
+                      <ng-container *ngFor="let district of districtsForCorrespondenceState">
+                        <span *ngIf="district.id === employeeData.cDistrictId">{{ district.name }}</span>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              Health Details
+              <div class="form-title">
+                <img src="assets\images\icons\health_details.svg">
+                Health Details
+              </div>
+              <div class="form-section-without-bg" *ngIf="employeeData?.healthDetails">
+                <div class="row g-3">
+                  <div class="col-md-3">
+                    <label class="form-label">Vision</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.healthDetails.vision}}</div>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Diabetes</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.healthDetails.diabetes}}</div>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Blood Press.(High/Low)</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.healthDetails.bloodPressure}}</div>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Heart Aliments</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.healthDetails.heartAilments}}</div>
+                  </div>
+                </div>
+                <div class="row g-3">
+                  <div class="col-md-3">
+                    <label class="form-label">Other Illness</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.healthDetails.anyOtherIllnes}}</div>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Last Major Illness</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.healthDetails.lastMajorIllness}}</div>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Last Major Illness Date</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.healthDetails.majoreIllnessDate | date:'dd-MM-yyyy' }}</div>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Blood Group</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.healthDetails.bloodGroop}}</div>
+                  </div>
+                </div>
+              </div>
+              Passport Details
+              <div *ngIf="employeeData?.passportNo && employeeData?.dateOfIssue && employeeData?.validUpto && employeeData?.issuedBy && employeeData?.passAddress && employeeData?.pCityName && employeeData?.emigrationChecReq">
+                <div class="form-title">
+                  <img src="assets\images\icons\passport.svg">
+                  Passport Details
+                </div>
+                <div class="form-section-without-bg">
+                  <div class="row g-3">
+                    <div class="col-md-3">
+                      <label class="form-label">Passport Number</label>
+                      <div class="form-label-readonly heightDiv">{{employeeData.passportNo}}</div>
+                    </div>
+                    <div class="col-md-3">
+                      <label class="form-label">Issued Date</label>
+                      <div class="form-label-readonly heightDiv">{{employeeData.dateOfIssue | date:'dd-MM-yyyy'}}</div>
+                    </div>
+                    <div class="col-md-3">
+                      <label class="form-label">Valid Upto</label>
+                      <div class="form-label-readonly heightDiv">{{employeeData.validUpto | date:'dd-MM-yyyy'}}</div>
+                    </div>
+                    <div class="col-md-3">
+                      <label class="form-label">Issued By</label>
+                      <div class="form-label-readonly heightDiv">{{employeeData.issuedBy}}</div>
+                    </div>
+                  </div>
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <label class="form-label">Passport Address</label>
+                      <div class="form-label-readonly heightDiv">{{employeeData.passAddress}}</div>
+                    </div>
+                    <div class="col-md-3">
+                      <label class="form-label">City</label>
+                      <div class="form-label-readonly heightDiv">{{employeeData.pCityName}}</div>
+                    </div>
+                    <div class="col-md-3">
+                      <label class="form-label">Emigration Check</label>
+                      <div class="form-label-readonly heightDiv">{{employeeData.emigrationChecReq}}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              Language Details
+              <div class="form-title">
+                <img src="assets\images\icons\language-details.svg">
+                Language Details
+              </div>
+              <div class="form-section-without-bg">
+                <div class="row g-3">
+                  <table class="table table-bordered table-fixed bordered-table">
+                    <thead>
+                      <tr>
+                        <th>Language</th>
+                        <th>Understand</th>
+                        <th>Read</th>
+                        <th>Write</th>
+                        <th>Speak</th>
+                      </tr>
+                    </thead>
+                    <tbody *ngFor="let language of employeeData.languageDetails">
+                      <tr>
+                        <td>{{language.languageName}}</td>
+                        <td>
+                          <img *ngIf="language.understand" src="assets/images/icons/check.svg" />
+                          <img *ngIf="!language.understand" src="assets/images/icons/close_lang.svg" />
+                        </td>
+                        <td>
+                          <img *ngIf="language.read" src="assets/images/icons/check.svg" />
+                          <img *ngIf="!language.read" src="assets/images/icons/close_lang.svg" />
+                        </td>
+                        <td>
+                          <img *ngIf="language.write" src="assets/images/icons/check.svg" />
+                          <img *ngIf="!language.write" src="assets/images/icons/close_lang.svg" />
+                        </td>
+                        <td>
+                          <img *ngIf="language.speek" src="assets/images/icons/check.svg" />
+                          <img *ngIf="!language.speek" src="assets/images/icons/close_lang.svg" />
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              Qualification Details
+              <div class="form-title">
+                <img src="assets\images\icons\dualification-details.svg">
+                Qualification Details
+              </div>
+              <div *ngFor="let qualification of employeeData.qualificationDetails" class="form-section-with-bg">
+                <div class="row g-3">
+                  <div class="col-md-9">
+                    <div class="row g-3">
+                      <div class="col-md-6  mt-2">
+                        <label class="form-label">Qualification</label>
+                        <div class="form-label-readonly heightDiv bg-white">
+                          {{ qualification.orderNo === 3 ? 'Graduation' : qualification.orderNo === 4 ? 'Post Graduation' : qualification.orderNo === 5 ? 'Others' : 'Unknown' }}
+                        </div>
+                      </div>
+                      <div class="col-md-6  mt-2">
+                        <label class="form-label">Degree</label>
+                        <div class="form-label-readonly heightDiv bg-white">{{qualification.degreeName}}</div>
+                      </div>
+                      <div class="col-md-6 mt-0">
+                        <label class="form-label">Specialization</label>
+                        <div class="form-label-readonly heightDiv bg-white">{{qualification.specialization}}</div>
+                      </div>
+                      <div class="col-md-6 mt-0">
+                        <label class="form-label">Passing Year</label>
+                        <div class="form-label-readonly heightDiv bg-white">{{qualification.passingYear}}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <embed class="img-fluid" [src]="safeUrls[employeeData.qualificationDetails.indexOf(qualification)]" type="application/pdf" width="100%" height="200px">
+                  </div>
+                </div>
+              </div>
+              Experience Details
+              <div class="form-title">
+                <img src="assets\images\icons\experience-details.svg">
+                Experience Details
+              </div>
+              <div *ngFor="let experience of employeeData.experienceDetails" class="form-section-with-bg">
+                <div class="row g-3">
+                  <div class="col-md-3">
+                    <label class="form-label">Company Name</label>
+                    <div class="form-label-readonly heightDiv bg-white">{{experience.companyName}}</div>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Position</label>
+                    <div class="form-label-readonly heightDiv bg-white">{{experience.position}}</div>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Starting Date</label>
+                    <div class="form-label-readonly heightDiv bg-white">{{experience.startDate | date:'dd-MM-yyyy'}}</div>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Leaving Date</label>
+                    <div class="form-label-readonly heightDiv bg-white">{{experience.endDate | date:'dd-MM-yyyy'}}</div>
+                  </div>
+                </div>
+                <div class="row g-3">
+                  <div class="col-md-4">
+                    <label class="form-label">HOD Name</label>
+                    <div class="form-label-readonly heightDiv bg-white">{{experience.hodName || 'NA'}}</div>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">HOD Email Address</label>
+                    <div class="form-label-readonly heightDiv bg-white">{{experience.hodEmail || 'NA'}}</div>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">HOD Mobile No</label>
+                    <div class="form-label-readonly heightDiv bg-white">{{experience.hodMobileNo || 'NA'}}</div>
+                  </div>
+                </div>
+              </div>
+              Social Details
+              <div class="form-title">
+                <img src="assets\images\icons\social-details.svg">
+                Social Details
+              </div>
+              <div class="form-section-with-bg">
+                <div class="row g-3">
+                  <div class="col-md-3">
+                    <label class="form-label">Facebook ID</label>
+                    <div class="form-label-readonly heightDiv bg-white">{{employeeData.facebookId}}</div>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">LinkedIn ID</label>
+                    <div class="form-label-readonly heightDiv bg-white">{{employeeData.linkdinId}}</div>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Instagram ID</label>
+                    <div class="form-label-readonly heightDiv bg-white">{{employeeData.instagramId}}</div>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Twitter ID</label>
+                    <div class="form-label-readonly heightDiv bg-white">{{employeeData.twiterId}}</div>
+                  </div>
+                  <div class="col-md-12">
+                    <label class="form-label">Resume File</label>
+                    <div class="bg-white text-center">
+                      <!--<embed [src]="getSafeResumeUrl(employeeData.resumeFilePath)"
+                             type="application/pdf"
+                             width="100%"
+                             height="400px" />-->
+                      <div *ngIf="safeResumeUrl">
+                        <iframe [src]="safeResumeUrl" width="100%" height="500px"></iframe>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!--<div class="mb-3 row">
+                <div class="d-flex justify-content-between">
+                  <div class="col-md-6 text-end">
+                    <button class="btn btn-success" type="button" (click)="navigatetohome()">verified/hired</button>
+                  </div>
+                  <div class="col-md-6">
+                    <button class="btn btn-danger" type="button" (click)="navigatetohome()">reject/next</button>
+                  </div>
+                </div>
+              </div>-->
+            </div>
+          </form>
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

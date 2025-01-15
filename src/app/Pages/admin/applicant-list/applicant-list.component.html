@@ -1,0 +1,1026 @@
+<div class="mt-4">
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb" class="d-flex justify-content-between align-items-center breadcrumb-bar">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/admin">{{groupname}}</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Employee List</li>
+    </ol>
+    <!--<button class="btn btn-primary ms-2" [routerLink]="'/admin/verify-employee'">Verify Employee</button>-->
+  </nav>
+
+
+  <!-- Form -->
+  <div class="form-container">
+    <form (ngSubmit)="onSubmit()">
+      <div class="row">
+        <!-- Left Column -->
+        <div class="col-md-6">
+          <div class="form-group mb-3">
+            <label for="groupDivision" class="form-label">Group Division</label>
+            <select class="form-select"
+                    [(ngModel)]="formData.groupDivision"
+                    name="groupDivision"
+                    (change)="showOptions(formData.groupDivision)"
+                    required>
+              <option value="0" selected>Select Group Division</option>
+              <option *ngFor="let item of GroupDivisionList" [value]="item.divisionId">{{ item.name }}</option>
+            </select>
+          </div>
+          <div class="form-group mb-3">
+            <label for="sub-division" class="form-label">Location</label>
+            <select class="form-select"
+                    [(ngModel)]="formData.subDivision"
+                    name="subDivision"
+                    required>
+              <option value="" selected>Choose Location</option>
+              <option *ngFor="let item of subDivisions" [value]="item.id">{{ item.name }}</option>
+            </select>
+          </div>
+          <div class="form-group mb-3">
+            <label for="designation" class="form-label">Designation</label>
+            <select class="form-select"
+                    [(ngModel)]="formData.designation"
+                    name="designation"
+                    required>
+              <option value="" selected>Select Designation</option>
+              <option *ngFor="let designation of DesignationList" [value]="designation.designationId">{{ designation.designationName }}</option>
+            </select>
+          </div>
+          <div class="form-group mb-3">
+            <label for="datepicker" class="form-label">From Date</label>
+            <div class="input-group" style="display: flex">
+              <input type="text"
+                     class="form-control"
+                     id="datepicker"
+                     [(ngModel)]="formData.fromDate"
+                     name="fromDate"
+                     placeholder="dd/mm/yyyy"
+                     required />
+              <span class="input-group-text">
+                <i class="entypo-calendar"></i>
+              </span>
+            </div>
+          </div>
+          <div class="form-group mb-3">
+            <label for="experienceFrom" class="form-label">Experience From</label>
+            <input type="number"
+                   class="form-control"
+                   placeholder="Enter Experience"
+                   [(ngModel)]="formData.experienceFrom"
+                   name="experienceFrom"
+                   aria-label="Search" />
+          </div>
+          <div class="form-group mb-3">
+            <label for="keyskill" class="form-label">Key Skill</label>
+            <input type="text"
+                   class="form-control"
+                   placeholder="e.g., Angular, TypeScript, HTML, CSS"
+                   [(ngModel)]="formData.keyskill"
+                   name="keyskill"
+                   aria-label="Search" />
+          </div>
+        </div>
+        <!-- Right Column -->
+        <div class="col-md-6">
+          <div class="form-group mb-3">
+            <label for="zone" class="form-label">Zone</label>
+            <select class="form-select"
+                    [(ngModel)]="formData.zone"
+                    name="zone"
+                    (change)="GetSubDivision(formData.zone)"
+                    required>
+              <option value="" selected>Select Zone</option>
+              <option *ngFor="let item of LocationList" [value]="item.locationId">{{ item.location }}</option>
+            </select>
+          </div>
+          <div class="form-group mb-3">
+            <label for="status" class="form-label">Status</label>
+            <select class="form-select"
+                    [(ngModel)]="formData.status"
+                    name="status"
+                    required>
+              <option value="" selected>Select Status</option>
+              <option *ngFor="let item of StatusList" [value]="item.id">{{ item.name }}</option>
+            </select>
+          </div>
+          <div class="form-group mb-3">
+            <label for="project" class="form-label">Project</label>
+            <select class="form-select"
+                    [(ngModel)]="formData.project"
+                    name="project"
+                    required>
+              <option value="" selected>Select Project Name</option>
+              <option *ngFor="let item of ProjectList" [value]="item.projectId">{{ item.projectName }}</option>
+            </select>
+          </div>
+          <div class="form-group mb-3">
+            <label for="datepicker1" class="form-label">To Date</label>
+            <div class="input-group" style="display: flex">
+              <input type="text"
+                     class="form-control"
+                     id="datepicker1"
+                     [(ngModel)]="formData.toDate"
+                     name="toDate"
+                     placeholder="dd/mm/yyyy"
+                     required />
+              <span class="input-group-text">
+                <i class="entypo-calendar"></i>
+              </span>
+            </div>
+          </div>
+          <div class="form-group mb-3">
+            <label for="experienceTo" class="form-label">Experience To</label>
+            <input type="number"
+                   class="form-control"
+                   placeholder="Enter Experience"
+                   [(ngModel)]="formData.experienceTo"
+                   name="experienceTo"
+                   aria-label="Search" />
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <!-- Search Bar -->
+        <div class="search-bar d-flex justify-content-between">
+          <div class="col-md-4">
+            <label for="zone" class="form-label">Count</label>
+          </div>
+          <div class="col-md-4 text-center">
+            <button class="btn btn-primary ms-2" type="submit">View</button>
+          </div>
+          <div class="col-md-4">
+            <input type="text"
+                   class="form-control"
+                   placeholder="Search here..."
+                   [(ngModel)]="formData.searchQuery"
+                   name="searchQuery"
+                   aria-label="Search" />
+          </div>
+        </div>
+      </div>
+    </form>
+    <hr />
+    <div class="row" *ngIf="applicantList.length>0">
+      <div class="col-md-12">
+        <div class="table-responsive">
+          <table class="table table-bordered responsive" style="font-size: 12px;">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Gender</th>
+                <th>DOB</th>
+                <th>Age</th>
+                <th>Email Address</th>
+                <th>Mobile No</th>
+                <th>Father Mobile No</th>
+                <th>Revenue Town</th>
+                <th>Designation Name</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of paginatedApplicantList; let i = index">
+                <td>{{ (currentPage - 1) * itemsPerPage + i + 1 }}</td>
+                <td>
+                  <ng-container *ngIf="item.groupDivisionId === 1; else defaultTemplate">
+                    <a (click)="showDetail(item.mobileNo)" style="color: rgb(13 110 253); cursor: pointer;">
+                      {{item.name}}
+                    </a>
+                  </ng-container>
+                  <ng-template #defaultTemplate>
+                    <a (click)="showDetailOther(item.applicantId)" style="color: rgb(13 110 253); cursor: pointer;">
+                      {{item.name}}
+                    </a>
+                  </ng-template>
+                </td>
+                <td>{{item.gender}}</td>
+                <td>{{item.dateOfBirth | date:'dd/MM/yyyy'}}</td>
+                <td>{{item.age}}</td>
+                <td>{{item.emailAddress}}</td>
+                <td>{{item.mobileNo}}</td>
+                <td>{{item.fatherMobileNo}}</td>
+                <td>{{item.revenueTown}}</td>
+                <td>{{item.designationName}}</td>
+                <td [title]="item.statusName+' by '+item.createdBy" style="cursor:pointer">{{item.statusName}}</td>
+                <td>
+                  <a *ngIf="item.statusName === 'Applied' && item.groupDivisionId === 4" class="btn p-0 fs-4" (click)="showEditModel(item.applicantId)">
+                    <i class="entypo entypo-pencil"></i>
+                  </a>
+                  <span class="font-bold fs-4" *ngIf="item.statusName === 'Applied' && item.groupDivisionId === 4">|</span>
+                  <ng-container *ngIf="item.groupDivisionId === 1; else defaultTemplate1">
+                    <a (click)="showDetail(item.mobileNo)" class="btn p-0 fs-4">
+                      <i class="entypo entypo-eye"></i>
+                    </a>
+                  </ng-container>
+                  <ng-template #defaultTemplate1>
+                    <a (click)="showDetailOther(item.applicantId)" class="btn p-0 fs-4">
+                      <i class="entypo entypo-eye"></i>
+                    </a>
+                  </ng-template>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <app-pagination [currentPage]="currentPage"
+                        [itemsPerPage]="itemsPerPage"
+                        [totalItems]="totalItems"
+                        [totalPages]="totalPages"
+                        (pageChanged)="onPageChange($event)"
+                        (pagesizeChanged)="onPagesizeChange($event)">
+        </app-pagination>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" #detailmodal id="detailmodal" tabindex="-1" aria-labelledby="patternModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="detailsModalLabel">Applicant Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body fs-4">
+        <div class="mt-4">
+          <form [formGroup]="jobApplicationForm">
+            <div class="form-container">
+              <div class="form-section-without-bg">
+                Personal Details Section
+                <div class="form-title">
+                  <img src="assets\images\icons\clarity_employee_line.svg">
+                  Employee Personal Details
+                </div>
+                <div class="row g-3" *ngIf="employeeData">
+                  <div class="col-md-4">
+                    <label class="form-label">Full Name</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.name}}</div>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">Father's Name</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.fatherName}}</div>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">Father's Mobile No</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.fatherMobileNo}}</div>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">Nationality</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.nationality}}</div>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">Date of Birth</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.dateOfBirth | date:'dd-MM-yyyy'}}</div>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">Gender</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.gender}}</div>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">Marital Status</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.maritalStatus}}</div>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">Email Address</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.emailAddress}}</div>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">Mobile No</label>
+                    <div class="form-label-readonly heightDiv">{{MobileNo}}</div>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">Vehicle Type</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.vehicleType}}</div>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">Driving Licence No</label>
+                    <div class="form-label-readonly heightDiv heightDiv">{{employeeData.drivingLicenseNo}}</div>
+                  </div>
+                  <div class="col-md-4 avatar-upload">
+                    <label class="form-label">Upload Face Photo</label>
+                    <img src={{employeeData.passportPhotoFilePath}} alt="Avatar">
+                  </div>
+                </div>
+              </div>
+              Skills Section
+              <div class="form-title">
+                <img src="assets\images\icons\skill.svg">
+                Skills
+              </div>
+              <div *ngFor="let skill of employeeData.skillDetails" class="form-section-with-bg">
+                <div class="row g-3">
+                  <div class="col-md-3">
+                    <label class="form-label">Skill / Software Name *</label>
+                    <div class="form-label-readonly heightDiv bg-white">{{skill.skillName}}</div>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Software Version</label>
+                    <div class="form-label-readonly heightDiv bg-white">{{skill.softwareVerson}}</div>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Last Used</label>
+                    <div class="form-label-readonly heightDiv bg-white">{{skill.lastUsed}}</div>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Experience</label>
+                    <div class="form-label-readonly heightDiv bg-white">{{skill.experienceYear + '.' + skill.experienceMonth + ' Yr'}}</div>
+                  </div>
+                </div>
+              </div>
+
+              Address Details
+              <div class="form-title">
+                <img src="assets\images\icons\location.svg">
+                Address Details
+              </div>
+              <div class="form-section-without-bg">
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label">Permanent Address</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.permanentAddress}}</div>
+                  </div>
+                  <div class="col-md-2">
+                    <label class="form-label">Pincode</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.pinCode}}</div>
+                  </div>
+                  <div class="col-md-2">
+                    <label class="form-label">State</label>
+                    <div class="form-label-readonly heightDiv">
+                      <ng-container *ngFor="let state of states">
+                        <span *ngIf="state.id === employeeData.stateId">{{ state.name }}</span>
+                      </ng-container>
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <label class="form-label">District</label>
+                    <div class="form-label-readonly heightDiv">
+                      <ng-container *ngFor="let district of districtsForState">
+                        <span *ngIf="district.id === employeeData.districtId">{{ district.name }}</span>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label">Correspondence Address</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.correspondenceAddress}}</div>
+                  </div>
+                  <div class="col-md-2">
+                    <label class="form-label">Pincode</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.cPinCode}}</div>
+                  </div>
+                  <div class="col-md-2">
+                    <label class="form-label">State</label>
+                    <div class="form-label-readonly heightDiv">
+                      <ng-container *ngFor="let state of states">
+                        <span *ngIf="state.id === employeeData.cStateId">{{ state.name }}</span>
+                      </ng-container>
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <label class="form-label">District</label>
+                    <div class="form-label-readonly heightDiv">
+                      <ng-container *ngFor="let district of districtsForCorrespondenceState">
+                        <span *ngIf="district.id === employeeData.cDistrictId">{{ district.name }}</span>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              Health Details
+              <div class="form-title">
+                <img src="assets\images\icons\health_details.svg">
+                Health Details
+              </div>
+              <div class="form-section-without-bg" *ngIf="employeeData?.healthDetails">
+                <div class="row g-3">
+                  <div class="col-md-3">
+                    <label class="form-label">Vision</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.healthDetails.vision}}</div>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Diabetes</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.healthDetails.diabetes}}</div>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Blood Press.(High/Low)</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.healthDetails.bloodPressure}}</div>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Heart Aliments</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.healthDetails.heartAilments}}</div>
+                  </div>
+                </div>
+                <div class="row g-3">
+                  <div class="col-md-3">
+                    <label class="form-label">Other Illness</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.healthDetails.anyOtherIllnes}}</div>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Last Major Illness</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.healthDetails.lastMajorIllness}}</div>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Last Major Illness Date</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.healthDetails.majoreIllnessDate | date:'dd-MM-yyyy' }}</div>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Blood Group</label>
+                    <div class="form-label-readonly heightDiv">{{employeeData.healthDetails.bloodGroop}}</div>
+                  </div>
+                </div>
+              </div>
+              Passport Details
+              <div *ngIf="employeeData?.passportNo && employeeData?.dateOfIssue && employeeData?.validUpto && employeeData?.issuedBy && employeeData?.passAddress && employeeData?.pCityName && employeeData?.emigrationChecReq">
+                <div class="form-title">
+                  <img src="assets\images\icons\passport.svg">
+                  Passport Details
+                </div>
+                <div class="form-section-without-bg">
+                  <div class="row g-3">
+                    <div class="col-md-3">
+                      <label class="form-label">Passport Number</label>
+                      <div class="form-label-readonly heightDiv">{{employeeData.passportNo}}</div>
+                    </div>
+                    <div class="col-md-3">
+                      <label class="form-label">Issued Date</label>
+                      <div class="form-label-readonly heightDiv">{{employeeData.dateOfIssue | date:'dd-MM-yyyy'}}</div>
+                    </div>
+                    <div class="col-md-3">
+                      <label class="form-label">Valid Upto</label>
+                      <div class="form-label-readonly heightDiv">{{employeeData.validUpto | date:'dd-MM-yyyy'}}</div>
+                    </div>
+                    <div class="col-md-3">
+                      <label class="form-label">Issued By</label>
+                      <div class="form-label-readonly heightDiv">{{employeeData.issuedBy}}</div>
+                    </div>
+                  </div>
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <label class="form-label">Passport Address</label>
+                      <div class="form-label-readonly heightDiv">{{employeeData.passAddress}}</div>
+                    </div>
+                    <div class="col-md-3">
+                      <label class="form-label">City</label>
+                      <div class="form-label-readonly heightDiv">{{employeeData.pCityName}}</div>
+                    </div>
+                    <div class="col-md-3">
+                      <label class="form-label">Emigration Check</label>
+                      <div class="form-label-readonly heightDiv">{{employeeData.emigrationChecReq}}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              Language Details
+              <div class="form-title">
+                <img src="assets\images\icons\language-details.svg">
+                Language Details
+              </div>
+              <div class="form-section-without-bg">
+                <div class="row g-3">
+                  <table class="table table-bordered table-fixed bordered-table">
+                    <thead>
+                      <tr>
+                        <th>Language</th>
+                        <th>Understand</th>
+                        <th>Read</th>
+                        <th>Write</th>
+                        <th>Speak</th>
+                      </tr>
+                    </thead>
+                    <tbody *ngFor="let language of employeeData.languageDetails">
+                      <tr>
+                        <td>{{language.languageName}}</td>
+                        <td>
+                          <img *ngIf="language.understand" src="assets/images/icons/check.svg" />
+                          <img *ngIf="!language.understand" src="assets/images/icons/close_lang.svg" />
+                        </td>
+                        <td>
+                          <img *ngIf="language.read" src="assets/images/icons/check.svg" />
+                          <img *ngIf="!language.read" src="assets/images/icons/close_lang.svg" />
+                        </td>
+                        <td>
+                          <img *ngIf="language.write" src="assets/images/icons/check.svg" />
+                          <img *ngIf="!language.write" src="assets/images/icons/close_lang.svg" />
+                        </td>
+                        <td>
+                          <img *ngIf="language.speek" src="assets/images/icons/check.svg" />
+                          <img *ngIf="!language.speek" src="assets/images/icons/close_lang.svg" />
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              Qualification Details
+              <div class="form-title">
+                <img src="assets\images\icons\dualification-details.svg">
+                Qualification Details
+              </div>
+              <div *ngFor="let qualification of employeeData.qualificationDetails" class="form-section-with-bg">
+                <div class="row g-3">
+                  <div class="col-md-9">
+                    <div class="row g-3">
+                      <div class="col-md-6  mt-2">
+                        <label class="form-label">Qualification</label>
+                        <div class="form-label-readonly heightDiv bg-white">
+                          {{ qualification.orderNo === 3 ? 'Graduation' : qualification.orderNo === 4 ? 'Post Graduation' : qualification.orderNo === 5 ? 'Others' : 'Unknown' }}
+                        </div>
+                      </div>
+                      <div class="col-md-6  mt-2">
+                        <label class="form-label">Degree</label>
+                        <div class="form-label-readonly heightDiv bg-white">{{qualification.degreeName}}</div>
+                      </div>
+                      <div class="col-md-6 mt-0">
+                        <label class="form-label">Specialization</label>
+                        <div class="form-label-readonly heightDiv bg-white">{{qualification.specialization}}</div>
+                      </div>
+                      <div class="col-md-6 mt-0">
+                        <label class="form-label">Passing Year</label>
+                        <div class="form-label-readonly heightDiv bg-white">{{qualification.passingYear}}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <embed class="img-fluid" [src]="safeUrls[employeeData.qualificationDetails.indexOf(qualification)]" type="application/pdf" width="100%" height="200px">
+                  </div>
+                </div>
+              </div>
+              Experience Details
+              <div class="form-title">
+                <img src="assets\images\icons\experience-details.svg">
+                Experience Details
+              </div>
+              <div *ngFor="let experience of employeeData.experienceDetails" class="form-section-with-bg">
+                <div class="row g-3">
+                  <div class="col-md-3">
+                    <label class="form-label">Company Name</label>
+                    <div class="form-label-readonly heightDiv bg-white">{{experience.companyName}}</div>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Position</label>
+                    <div class="form-label-readonly heightDiv bg-white">{{experience.position}}</div>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Starting Date</label>
+                    <div class="form-label-readonly heightDiv bg-white">{{experience.startDate | date:'dd-MM-yyyy'}}</div>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Leaving Date</label>
+                    <div class="form-label-readonly heightDiv bg-white">{{experience.endDate | date:'dd-MM-yyyy'}}</div>
+                  </div>
+                </div>
+                <div class="row g-3">
+                  <div class="col-md-4">
+                    <label class="form-label">HOD Name</label>
+                    <div class="form-label-readonly heightDiv bg-white">{{experience.hodName || 'NA'}}</div>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">HOD Email Address</label>
+                    <div class="form-label-readonly heightDiv bg-white">{{experience.hodEmail || 'NA'}}</div>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">HOD Mobile No</label>
+                    <div class="form-label-readonly heightDiv bg-white">{{experience.hodMobileNo || 'NA'}}</div>
+                  </div>
+                </div>
+              </div>
+              Social Details
+              <div class="form-title">
+                <img src="assets\images\icons\social-details.svg">
+                Social Details
+              </div>
+              <div class="form-section-with-bg">
+                <div class="row g-3">
+                  <div class="col-md-3">
+                    <label class="form-label">Facebook ID</label>
+                    <div class="form-label-readonly heightDiv bg-white">{{employeeData.facebookId}}</div>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">LinkedIn ID</label>
+                    <div class="form-label-readonly heightDiv bg-white">{{employeeData.linkdinId}}</div>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Instagram ID</label>
+                    <div class="form-label-readonly heightDiv bg-white">{{employeeData.instagramId}}</div>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Twitter ID</label>
+                    <div class="form-label-readonly heightDiv bg-white">{{employeeData.twiterId}}</div>
+                  </div>
+                  <div class="col-md-12">
+                    <label class="form-label">Resume File</label>
+                    <div class="bg-white text-center">
+                      <!--<embed [src]="getSafeResumeUrl(employeeData.resumeFilePath)"
+                             type="application/pdf"
+                             width="100%"
+                             height="400px" />-->
+                      <div *ngIf="safeResumeUrl">
+                        <iframe [src]="safeResumeUrl" width="100%" height="500px"></iframe>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!--<div class="mb-3 row">
+                <div class="d-flex justify-content-between">
+                  <div class="col-md-6 text-end">
+                    <button class="btn btn-success" type="button" (click)="navigatetohome()">verified/hired</button>
+                  </div>
+                  <div class="col-md-6">
+                    <button class="btn btn-danger" type="button" (click)="navigatetohome()">reject/next</button>
+                  </div>
+                </div>
+              </div>-->
+            </div>
+          </form>
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal" #otherdetailmodal id="otherdetailmodal" tabindex="-1" aria-labelledby="patternModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="otherdetailmodalLabel">Applicant Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body fs-4">
+        <div class="mt-4">
+          <div class="form-container">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group mb-3">
+                  <label for="inputZone" class="form-label width-180">Zone</label>
+                  <label class="form-label">{{applicantData.zoneName}}</label>
+                </div>
+                <div class="form-group mb-3">
+                  <label for="inputDesignation" class="form-label width-180">Designation</label>
+                  <label class="form-label">{{applicantData.designationName}}</label>
+                </div>
+                <div class="form-group mb-3">
+                  <label for="inputName" class="form-label width-180">Name</label>
+                  <label class="form-label">{{applicantData.name}}</label>
+                </div>
+                <div class="form-group mb-3">
+                  <label for="inputGender" class="form-label width-180">Gender</label>
+                  <label class="form-label">{{applicantData.gender}}</label>
+                </div>
+                <div class="form-group mb-3">
+                  <label for="inputDOB" class="form-label width-180">Date of birth</label>
+                  <label class="form-label">{{applicantData.dateOfBirth | date:'dd-MM-yyyy'}}</label>
+                </div>
+                <div class="form-group mb-3">
+                  <label for="inputAge" class="form-label width-180">Age</label>
+                  <label class="form-label">{{ getFormattedAge() }}</label>
+                </div>
+                <div class="form-group mb-3">
+                  <label for="inputEmail" class="form-label width-180">Email</label>
+                  <label class="form-label">{{applicantData.emailAddress}}</label>
+                </div>
+                <div class="form-group mb-3">
+                  <label for="inputPermanentAddress" class="form-label width-180">Permanent Address</label>
+                  <label class="form-label">{{applicantData.permanentAddress +'- '+ applicantData.pinCode}}</label>
+                </div>
+                <div class="form-group mb-3">
+                  <label for="inputAadharNo" class="form-label width-180">Aadhar No</label>
+                  <label class="form-label">{{applicantData.adharNo}}</label>
+                </div>
+                <div class="form-group mb-3 d-block">
+                  <label for="inputAdharFile" class="form-label width-180 mt-3">Aadhar Image</label>
+                  <div class="scroll-container">
+                    <ng-container *ngIf="isImage(applicantData.adharpath); else pdfTemplate4">
+                      <img [src]="applicantData.adharpath" alt="Aadhar Document" class="img-fluid" style="width: 550px;">
+                    </ng-container>
+                    <ng-template #pdfTemplate4>
+                      <embed [src]="safeadharpathUrl" type="application/pdf" width="100%" height="350px" *ngIf="safeadharpathUrl">
+                    </ng-template>
+                  </div>
+                </div>
+                <div style="margin-top: 4rem;"></div>
+                <div class="form-group mb-3">
+                  <label for="inputPanNo" class="form-label width-180">PAN No</label>
+                  <label class="form-label">{{applicantData.panNo}}</label>
+                </div>
+                <div class="form-group mb-3 d-block">
+                  <label for="inputPanFile" class="form-label width-180 mt-3">PAN Image</label>
+                  <div class="scroll-container">
+                    <ng-container *ngIf="isImage(applicantData.pancardpath); else pdfTemplate3">
+                      <img [src]="applicantData.pancardpath" alt="Pan Document" class="img-fluid" style="width: 550px;">
+                    </ng-container>
+                    <ng-template #pdfTemplate3>
+                      <embed [src]="safepancardpathUrl" type="application/pdf" width="100%" height="350px" *ngIf="safepancardpathUrl">
+                    </ng-template>
+                  </div>
+                </div>
+                <div class="form-group mb-3 d-block" *ngIf="safeQualificationUrl">
+                  <label for="inputQualification" class="form-label width-180 mt-3">Qualification</label>
+                  <div class="scroll-container" style=" height: 290px">
+                    <embed [src]="safeQualificationUrl" type="application/pdf" width="100%" height="100%" *ngIf="safeQualificationUrl">
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="form-group mb-3">
+                  <label for="inputSubDivision" class="form-label width-180">Sub Division</label>
+                  <label class="form-label">{{applicantData.revenueTown}}</label>
+                </div>
+                <div class="form-group mb-3">
+                  <label for="inputFName" class="form-label width-180">Father Name</label>
+                  <label class="form-label">{{applicantData.fatherName}}</label>
+                </div>
+                <div class="form-group mb-3">
+                  <label for="inputMaritalStatus" class="form-label width-180">Martial Status</label>
+                  <label class="form-label">{{applicantData.maritalStatus}}</label>
+                </div>
+                <div class="form-group mb-3">
+                  <label for="inputMobileNo" class="form-label width-180">Mobile No.</label>
+                  <label class="form-label">{{applicantData.mobileNo}}</label>
+                </div>
+                <div class="form-group mb-3">
+                  <label for="inputFatherMobileNo" class="form-label width-180">Father Mobile No.</label>
+                  <label class="form-label">{{applicantData.fatherMobileNo}}</label>
+                </div>
+                <div class="form-group mb-3">
+                  <label for="inputUANNo" class="form-label width-180">UAN NO</label>
+                  <label class="form-label">{{applicantData.uanNo}}</label>
+                </div>
+                <div class="form-group mb-3">
+                  <label for="inputCorrespondenceAddress" class="form-label width-180">Correspondence Address</label>
+                  <label class="form-label">{{applicantData.cAddress +'- '+applicantData.cPinCode}}</label>
+                </div>
+                <div class="form-group mb-3">
+                  <label for="inputESINo" class="form-label width-180">ESI NO</label>
+                  <label class="form-label">{{applicantData.esiNo}}</label>
+                </div>
+                <div class="form-group mb-3">
+                  <label for="inputMRID" class="form-label width-180">MRID</label>
+                  <label class="form-label">{{applicantData.mrid}}</label>
+                </div>
+                <div class="form-group mb-3">
+                  <label for="inputBankName" id="labelBankName" class="form-label width-180">Bank Name</label>
+                  <label class="form-label">{{applicantData.bankName}}</label>
+                </div>
+                <div class="form-group mb-3">
+                  <label for="inputBankAccountNo" class="form-label width-180">Bank A/c No</label>
+                  <label class="form-label">{{applicantData.bankAccountNo}}</label>
+                </div>
+                <div class="form-group mb-3">
+                  <label for="inputIFSCCode" class="form-label width-180">IFSC Code</label>
+                  <label class="form-label">{{applicantData.ifscCode}}</label>
+                </div>
+
+                <div class="form-group mb-3 d-block">
+                  <label for="inputBankStatementFile" class="form-label width-180 mt-3">Bank Image</label>
+                  <div class="scroll-container">
+                    <ng-container *ngIf="isImage(applicantData.bankDocumentpath); else pdfTemplate1">
+                      <img [src]="applicantData.bankDocumentpath" alt="Bank Document" class="img-fluid" style="width: 550px;">
+                    </ng-container>
+                    <ng-template #pdfTemplate1>
+                      <embed [src]="safebankDocumentpathUrl" type="application/pdf" width="100%" height="300px" *ngIf="safebankDocumentpathUrl">
+                    </ng-template>
+                  </div>
+                </div>
+                <div class="form-group mb-3 d-block">
+                  <label for="inputPassportPhoto" class="form-label width-180 mt-3">Photo</label>
+                  <div class="scroll-container">
+                    <ng-container *ngIf="isImage(applicantData.passportPhotopath); else pdfTemplate2">
+                      <img [src]="applicantData.passportPhotopath" alt="Bank Document" class="img-fluid" style="width: 550px;">
+                    </ng-container>
+                    <ng-template #pdfTemplate2>
+                      <embed [src]="safepassportPhotopathUrl" type="application/pdf" width="100%" height="350px" *ngIf="safepassportPhotopathUrl">
+                    </ng-template>
+                  </div>
+
+                  <div class="form-group mb-3 d-block" *ngIf="safeResumeUrl">
+                    <label for="inputResume" class="form-label width-180 mt-2">Resume</label>
+                    <div class="scroll-container" style=" height: 300px">
+                      <embed [src]="safeResumeUrl" type="application/pdf" width="100%" height="100%" *ngIf="safeResumeUrl">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <br>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal" #editothermodal id="editothermodal" tabindex="-1" aria-labelledby="patternModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editothermodalLabel">Edit Applicant Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body fs-4">
+        <div class="mt-4">
+          <div class="form-container">
+            <form (ngSubmit)="onSubmit()" [formGroup]="verifyEmployeeForm">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group mb-3">
+                    <label for="inputZone" class="form-label width-180">Zone</label>
+                    <div class="col-md">
+                      <select class="form-select" id="inputZone" formControlName="zoneId" required (change)="OnZoneChange($event)">
+                        <option value="0" disabled selected>Select Zone Name</option>
+                        <option *ngFor="let item of LocationList" [value]="item.locationId">{{ item.location }}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group mb-3">
+                    <label for="inputDesignation" class="form-label width-180">Designation</label>
+                    <div class="col-md">
+                      <select class="form-select" id="inputDesignation" formControlName="designationId" required>
+                        <option value="0" disabled selected>Select Designation Name</option>
+                        <option *ngFor="let designation of DesignationList" [value]="designation.designationId">{{ designation.designationName }}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group mb-3">
+                    <label for="inputName" class="form-label width-180">Name</label>
+                    <label class="form-label">{{applicantData.name}}</label>
+                  </div>
+                  <div class="form-group mb-3">
+                    <label for="inputGender" class="form-label width-180">Gender</label>
+                    <label class="form-label">{{applicantData.gender}}</label>
+                  </div>
+                  <div class="form-group mb-3">
+                    <label for="inputDOB" class="form-label width-180">Date of birth</label>
+                    <label class="form-label">{{applicantData.dateOfBirth | date:'dd-MM-yyyy'}}</label>
+                  </div>
+                  <div class="form-group mb-3">
+                    <label for="inputAge" class="form-label width-180">Age</label>
+                    <label class="form-label">{{ getFormattedAge() }}</label>
+                  </div>
+                  <div class="form-group mb-3">
+                    <label for="inputEmail" class="form-label width-180">Email</label>
+                    <label class="form-label">{{applicantData.emailAddress}}</label>
+                  </div>
+                  <div class="form-group mb-3">
+                    <label for="inputPermanentAddress" class="form-label width-180">Permanent Address</label>
+                    <label class="form-label">{{applicantData.permanentAddress +'- '+ applicantData.pinCode}}</label>
+                  </div>
+                  <div class="form-group mb-3">
+                    <label for="inputAadharNo" class="form-label width-180">Aadhar No</label>
+                    <input type="text" class="form-control" formControlName="adharNo" />
+                  </div>
+                  <div class="form-group mb-3 d-block">
+                    <label for="inputAdharFile" class="form-label width-180 mt-3">Aadhar Image</label>
+                    <div class="scroll-container">
+                      <ng-container *ngIf="isImage(applicantData.adharpath); else pdfTemplate4">
+                        <img [src]="applicantData.adharpath" alt="Aadhar Document" class="img-fluid" style="width: 550px;">
+                      </ng-container>
+                      <ng-template #pdfTemplate4>
+                        <embed [src]="safeadharpathUrl" type="application/pdf" width="100%" height="600px" *ngIf="safeadharpathUrl">
+                      </ng-template>
+                    </div>
+                  </div>
+                  <div style="margin-top: 4rem;"></div>
+                  <div class="form-group mb-3">
+                    <label for="inputPanNo" class="form-label width-180">PAN No</label>
+                    <input type="text" class="form-control" formControlName="panNo" />
+                  </div>
+                  <div class="form-group mb-3 d-block">
+                    <label for="inputPanFile" class="form-label width-180 mt-3">PAN Image</label>
+                    <div class="scroll-container">
+                      <ng-container *ngIf="isImage(applicantData.pancardpath); else pdfTemplate3">
+                        <img [src]="applicantData.pancardpath" alt="Pan Document" class="img-fluid" style="width: 550px;">
+                      </ng-container>
+                      <ng-template #pdfTemplate3>
+                        <embed [src]="safepancardpathUrl" type="application/pdf" width="100%" height="600px" *ngIf="safepancardpathUrl">
+                      </ng-template>
+                    </div>
+                  </div>
+                  <div class="form-group mb-3 d-block" *ngIf="safeQualificationUrl">
+                    <label for="inputQualification" class="form-label width-180 mt-3">Qualification</label>
+                    <div class="scroll-container" style=" height: 290px">
+                      <embed [src]="safeQualificationUrl" type="application/pdf" width="100%" height="100%">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group mb-3">
+                    <label for="inputSubDivision" class="form-label width-180">Sub Division</label>
+                    <div class="col-md">
+                      <select class="form-select" id="inputSubDivision" formControlName="subdivisionId" required>
+                        <option value="0" disabled selected>Select Sub Division Name</option>
+                        <option *ngFor="let item of subDivisions" [value]="item.id">{{ item.name }}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group mb-3" style="margin-top: 4rem;">
+                    <label for="inputFName" class="form-label width-180">Father Name</label>
+                    <label class="form-label">{{applicantData.fatherName}}</label>
+                  </div>
+                  <div class="form-group mb-3">
+                    <label for="inputMaritalStatus" class="form-label width-180">Martial Status</label>
+                    <label class="form-label">{{applicantData.maritalStatus}}</label>
+                  </div>
+                  <div class="form-group mb-3">
+                    <label for="inputMobileNo" class="form-label width-180">Mobile No.</label>
+                    <label class="form-label">{{applicantData.mobileNo}}</label>
+                  </div>
+                  <div class="form-group mb-3">
+                    <label for="inputFatherMobileNo" class="form-label width-180">Father Mobile No.</label>
+                    <label class="form-label">{{applicantData.fatherMobileNo}}</label>
+                  </div>
+                  <div class="form-group mb-3">
+                    <label for="inputUANNo" class="form-label width-180">UAN NO</label>
+                    <label class="form-label">{{applicantData.uanNo}}</label>
+                  </div>
+                  <div class="form-group mb-3">
+                    <label for="inputCorrespondenceAddress" class="form-label width-180">Correspondence Address</label>
+                    <label class="form-label">{{applicantData.cAddress +'- '+applicantData.cPinCode}}</label>
+                  </div>
+                  <div class="form-group mb-3">
+                    <label for="inputESINo" class="form-label width-180">ESI NO</label>
+                    <label class="form-label">{{applicantData.esiNo}}</label>
+                  </div>
+                  <div class="form-group mb-3">
+                    <label for="inputMRID" class="form-label width-180">MRID</label>
+                    <label class="form-label">{{applicantData.mrid}}</label>
+                  </div>
+                  <div class="form-group mb-3">
+                    <label for="inputBankName" id="labelBankName" class="form-label width-180">
+                      Bank Name
+                    </label>
+                    <div class="col-md">
+                      <select class="form-select" id="inputBankName" formControlName="bankId" required>
+                        <option value="" disabled selected>Select Bank Name</option>
+                        <option *ngFor="let bank of banks" [value]="bank.id">{{ bank.name }}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group mb-3">
+                    <label for="inputBankAccountNo" class="form-label width-180">Bank A/c No</label>
+                    <input type="text" class="form-control" formControlName="bankAccountNo" />
+                  </div>
+                  <div class="form-group mb-3">
+                    <label for="inputIFSCCode" class="form-label width-180">IFSC Code</label>
+                    <input type="text" class="form-control" formControlName="ifscCode" />
+                  </div>
+
+                  <div class="form-group mb-3 d-block">
+                    <label for="inputBankStatementFile" class="form-label width-180 mt-3">Bank Image</label>
+                    <div class="scroll-container">
+                      <ng-container *ngIf="isImage(applicantData.bankDocumentpath); else pdfTemplate1">
+                        <img [src]="applicantData.bankDocumentpath" alt="Bank Document" class="img-fluid" style="width: 550px;">
+                      </ng-container>
+                      <ng-template #pdfTemplate1>
+                        <embed [src]="safebankDocumentpathUrl" type="application/pdf" width="100%" height="600px" *ngIf="safebankDocumentpathUrl">
+                      </ng-template>
+                    </div>
+                  </div>
+                  <div class="form-group mb-3 d-block">
+                    <label for="inputPassportPhoto" class="form-label width-180 mt-3">Photo</label>
+                    <div class="scroll-container">
+                      <ng-container *ngIf="isImage(applicantData.passportPhotopath); else pdfTemplate2">
+                        <img [src]="applicantData.passportPhotopath" alt="Bank Document" class="img-fluid" style="width: 550px;">
+                      </ng-container>
+                      <ng-template #pdfTemplate2>
+                        <embed [src]="safepassportPhotopathUrl" type="application/pdf" width="100%" height="600px" *ngIf="safepassportPhotopathUrl">
+                      </ng-template>
+                    </div>
+
+                    <div class="form-group mb-3 d-block">
+                      <label for="inputResume" class="form-label width-180 mt-2">Resume</label>
+                      <div class="scroll-container" style="width: 550px; height: 244px">
+                        <embed [src]="safeResumeUrl" type="application/pdf" width="100%" height="100%" *ngIf="safeResumeUrl">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <div class="d-flex justify-content-between">
+                  <div class="col-md-6 text-end">
+                    <button class="btn btn-success" type="button" (click)="onEditApplicant()">Save</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <!--<div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>-->
+    </div>
+  </div>
+</div>

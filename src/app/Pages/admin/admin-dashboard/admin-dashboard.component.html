@@ -1,0 +1,84 @@
+<!-- TS17313187355325: Xenon - Boostrap Admin Template created by Laborator / Please buy this theme and support the updates -->
+
+<div class="row">
+  <!--<div class="col-sm-6 col-xs-6" *ngFor="let group of GroupDivisionList; let i = index">
+    <div class="tile-stats" [ngClass]="getTileColor(i)">
+      <div class="icon">
+        <i class="entypo-users"></i>
+      </div>
+      <div class="num" style="border-bottom: 1px solid #d1d1d180; ">{{group.name}}</div>
+      <div class="row text-white mt-3">
+        <div class="col-sm-6">
+          <h4 class="text-white">Yearly:{{ currentYear }}</h4>
+          <p>Applied : 20</p>
+          <p>Verified : 20</p>
+          <p *ngIf="group.name!='Photo Billing' && group.name!='Smart Meter'">Interviewed : 10</p>
+          <p *ngIf="group.name!='Photo Billing' && group.name!='Smart Meter'">Offered : 10</p>
+          <p>Hired : 5</p>
+        </div>
+        <div class="col-sm-6">
+          <h4 class="text-white">Monthly:{{ currentMonthYear }}</h4>
+          <p>Applied : 20</p>
+          <p>Verified : 20</p>
+          <p *ngIf="group.name!='Photo Billing' && group.name!='Smart Meter'">Interviewed : 10</p>
+          <p *ngIf="group.name!='Photo Billing' && group.name!='Smart Meter'">Offered : 10</p>
+          <p>Hired : 5</p>
+        </div>
+      </div>
+    </div>
+  </div>-->
+
+  <div class="col-md-4 col-lg-3 col-sm-6 col-xs-12" *ngFor="let group of groupedData | keyvalue; let i = index">
+    <div class="tile-stats" [ngClass]="getTileColor(i)">
+      <div class="tile-header">
+        <i class="entypo-list"></i> <a href="/admin">
+          {{group.key}}
+        </a>
+      </div>
+      <div class="icon">
+        <i class="entypo-users"></i>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="panel panel-primary" id="charts_env">
+            <div class="panel-heading">
+              <div class="panel-title">{{ currentMonthYear }}</div>
+              <div class="panel-options">
+                <ul class="nav nav-tabs">
+                  <li [class.active]="isActiveTab(i, 'year')" (click)="ShowTabs('year', i, group.key)">
+                    <a class="nav-link">Year</a>
+                  </li>
+                  <li [class.active]="isActiveTab(i, 'month')" (click)="ShowTabs('month', i, group.key)">
+                    <a class="nav-link">Month</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="tab-content">
+                <div class="tab-pane" [class.active]="isActiveTab(i, 'year')" id="line-chart_{{i}}">
+                  <div class="list-group" *ngFor="let item of group.value; let j = index">
+                    <a (click)="item.applicantCount > 0 ? navigateToApplicantList(group.key, item.groupDivisionId, item.statusId, 'Year') : $event.preventDefault()" class="list-group-item" *ngIf="(group.key !== 'Photo Billing' && group.key !== 'Smart Meter') || (item.statusName !== 'Interview' && item.statusName !== 'Offered')" [ngClass]="{'disabled-link': item.applicantCount < 1}">
+                      <span class="badge" [ngClass]="getbadgeColor(j)">{{item.applicantCount}}</span>
+                      {{item.statusName}}
+                    </a>
+                  </div>
+                </div>
+                <div class="tab-pane" [class.active]="isActiveTab(i, 'month')" id="pie-chart_{{i}}">
+                  <div class="list-group" *ngFor="let item of groupedDataMonth[group.key]; let j = index">
+                    <a (click)="item.applicantCount > 0 ? navigateToApplicantList(group.key, item.groupDivisionId, item.statusId, 'Month') : $event.preventDefault()" class="list-group-item" *ngIf="(group.key !== 'Photo Billing' && group.key !== 'Smart Meter') || (item.statusName !== 'Interview' && item.statusName !== 'Offered')" [ngClass]="{'disabled-link': item.applicantCount < 1}">
+                      <span class="badge" [ngClass]="getbadgeColor(j)">{{item.applicantCount}}</span>
+                      {{item.statusName}}
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

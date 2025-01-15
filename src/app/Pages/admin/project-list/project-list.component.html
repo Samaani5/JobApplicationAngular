@@ -1,0 +1,44 @@
+<div class="mt-4">
+    <nav aria-label="breadcrumb" class="d-flex justify-content-between align-items-center breadcrumb-bar">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="/admin">{{groupname}}</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Project List</li>
+        </ol>
+    </nav>
+
+    <div class="form-container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Project Name</th>
+                                <th>Group Division</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of paginatedgroupProjectList; let i = index">
+                                <td>{{ (currentPage - 1) * itemsPerPage + i + 1 }}</td>
+                                <td>{{item.projectName}}</td>
+                                <td>{{item.name}}</td>
+                                <td style="cursor:pointer">{{item.active==1?"Active":"Inactive"}}</td>
+                                <td><a class="btn p-0 fs-4" routerLink="/admin/add-project/{{item.projectId}}"><i class="entypo entypo-pencil"></i></a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <app-pagination [currentPage]="currentPage"
+                          [itemsPerPage]="itemsPerPage"
+                          [totalItems]="totalItems"
+                          [totalPages]="totalPages"
+                          (pageChanged)="onPageChange($event)"
+                          (pagesizeChanged)="onPagesizeChange($event)">
+          </app-pagination>
+            </div>
+        </div>
+    </div>
+</div>

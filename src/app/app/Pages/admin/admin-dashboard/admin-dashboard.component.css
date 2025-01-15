@@ -1,0 +1,53 @@
+.tile-stats .tile-header i {
+  float: right;
+  color: #fff;
+  font-size: 22px;
+}
+
+.tile-stats .tile-header a {
+  float: left;
+  color: #fff;
+  font-size: 18px;
+}
+.tile-header {
+  display: block;
+  width: 100%;
+  margin-bottom: 25px;
+}
+
+.panel-primary {
+  background: none !important;
+  border: none !important;
+  margin-bottom: 0;
+}
+
+  .panel-primary > .panel-heading {
+    background-color: transparent !important;
+  }
+
+.panel-heading > .panel-options {
+  padding-right: 0 !important;
+}
+
+.panel > .panel-heading .panel-title {
+  font-size: 14px;
+  color: #fff;
+  padding: 10px 0px;
+}
+
+.nav-tabs > li > a {
+  margin-right: 0px;
+}
+
+.list-group {
+  margin-bottom: 0;
+  padding-left: 0;
+}
+.disabled-link {
+  pointer-events: none;
+  cursor: not-allowed; 
+}
+  .disabled-link:hover {
+    background-color: transparent;
+    color: #ccc; 
+  }
