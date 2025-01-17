@@ -1,5 +1,5 @@
 .dropdown-toggle::after {
-  margin-left: 12.255em;  
+  /*margin-left: 12.255em;*/  
 }
 .dropdown-menu {
   min-width: 100%;

@@ -3,6 +3,8 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { JobApplyService } from '../../../Services/JobApply/job-apply.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 import { AddSubDivision } from '../../../Models/Masters/add-group-division';
 import { UserSession } from '../../../Models/UserSession/user-session';
 import { LocationList } from '../../../Models/JobPosting/job-posting';
@@ -22,7 +24,11 @@ export class AddSubDivisionComponent {
     addSubDivision = new AddSubDivision;
     SubDivisionList: any;
     GroupDivisionList: any;
-    LocationList: LocationList[] = [];
+  LocationList: LocationList[] = [];
+  allSubDivisionList: any[] = [];
+  subDivisionSuggestions: any[] = [];
+  filteredSubDivision: any[] = [];
+  searchTerms = new Subject<string>();
     usession = new UserSession;
    constructor(private fb: FormBuilder, private jobapplyservice: JobApplyService, private route: ActivatedRoute, private router: Router) {
     this.usession = JSON.parse((sessionStorage.getItem('session') || '{}'));
@@ -41,12 +47,55 @@ export class AddSubDivisionComponent {
     this.GetGroupdivisions();
   }
   ngOnInit(): void {
+    this.GetAllSubDivision();
+    this.searchTerms
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        map((term) => this.filteredSubDivisions(term))
+      )
+      .subscribe((filtered) => {
+        this.filteredSubDivision = filtered;
+      });
     const existingData = this.getEditData();
     if (existingData) {
       this.isEditMode = true;
       this.SubDivisionForm.patchValue(existingData);
     }
   }
+
+  GetAllSubDivision() {
+    this.jobapplyservice.GetAllSubDivision().subscribe(
+      (result: any) => {
+        if (result.status == 200) {
+          this.allSubDivisionList = result.body;
+        }
+      },
+      (error: any) => {
+        Swal.fire({
+          text: error.message,
+          icon: "error"
+        });
+      });
+  }
+  onSearch(event: Event): void {
+    const inputValue = (event.target as HTMLInputElement).value;
+
+    this.subDivisionSuggestions = this.filteredSubDivisions(inputValue);
+  }
+  filteredSubDivisions(term: string): any[] {
+    if (!term) {
+      return [];
+    }
+    return this.allSubDivisionList.filter((subDivision) =>
+      subDivision.revenueTown.toLowerCase().includes(term.toLowerCase())
+    );
+  }
+
+  //selectSubDivision(subDivision: any) {
+  //  this.SubDivisionForm.patchValue({ name: subDivision.revenueTown });
+  //  this.subDivisionSuggestions = [];
+  //}
   getEditData() {
     return null;
   }

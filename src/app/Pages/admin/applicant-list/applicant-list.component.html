@@ -154,7 +154,13 @@
                    placeholder="Search here..."
                    [(ngModel)]="formData.searchQuery"
                    name="searchQuery"
-                   aria-label="Search" />
+                   aria-label="Search"
+                   (keyup)="SearchByName(formData.searchQuery)" />
+            <ul *ngIf="namesList.length > 0"  class="list-group">
+              <li *ngFor="let name of namesList" (click)="onSelectName(name)" class="list-group-item border-0 fs-4" style="cursor:pointer;">
+                {{ name.name}} - {{name.designationName }}
+              </li>
+            </ul>
           </div>
         </div>
       </div>

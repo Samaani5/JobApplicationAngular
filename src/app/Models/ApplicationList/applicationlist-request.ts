@@ -71,5 +71,7 @@ export class Applicationlist {
 }
 export class EmployeeDetail {
   'applicantId': number;
+  'name': string;
+  'groupDivisionId': number;
 }
 

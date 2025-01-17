@@ -58,4 +58,8 @@ export class ApplicantListService {
     let url: string = environment.apiUrl + 'Report/Skipapplication';
     return this.http.post(url, model);
   }
+  SearchByName(model: EmployeeDetail): Observable<any> {
+    let url: string = environment.apiUrl + 'Report/SearchByName';
+    return this.http.post(url, model);
+  }
 }

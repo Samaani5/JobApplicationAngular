@@ -11,14 +11,14 @@ export class AddProject {
 }
 export class AddDesignation {
   "designationId": number;
-  "groupDivisionId": number;
+  "groupDivisionId": number[];
   "designationName": string;
   "designationCode": string;
   "active": number;
 }
 export class AddZone {
   "zoneId": number;
-  "groupDivisionId": number;
+  "groupDivisionId": number[];
   "name": string;
   "active": number;
   "emailAddress": string;

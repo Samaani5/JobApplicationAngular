@@ -1,6 +1,6 @@
 <hr />
 <div class="header">
-  <h3>{{ isEditMode ? 'Update Sub division Master' : 'Add Sub division Master' }}</h3>
+  <h3>{{ isEditMode ? 'Update Sub division' : 'Add Sub division' }}</h3>
 </div>
 <br />
 <div class="row justify-content-center">
@@ -34,10 +34,16 @@
                      type="text"
                      class="form-control"
                      formControlName="revenueTown"
-                     placeholder="Enter Sub Division name" />
+                     placeholder="Enter Sub Division name"
+                     (input)="onSearch($event)"/>
               <div *ngIf="SubDivisionForm.get('revenueTown')?.invalid && SubDivisionForm.get('revenueTown')?.touched" class="text-danger">
                 Sub Division is required.
               </div>
+              <ul *ngIf="subDivisionSuggestions.length > 0" class="list-group">
+                <li *ngFor="let suggestion of subDivisionSuggestions" class="list-group-item fs-4">
+                  {{ suggestion.revenueTown }}
+                </li>
+              </ul>
             </div>
           </div>
        

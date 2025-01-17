@@ -1,6 +1,6 @@
 <hr />
 <div class="header">
-  <h3>{{ isEditMode ? 'Update Zone Master' : 'Add Zone Master' }}</h3>
+  <h3>{{ isEditMode ? 'Update Zone' : 'Add Zone' }}</h3>
 </div>
 <br />
 <div class="row justify-content-center">
@@ -11,13 +11,15 @@
           <div class="form-group">
             <label for="field-1" class="col-sm-2 control-label label-large">Division</label>
             <div class="col-sm-8">
-              <select class="form-control" formControlName="groupDivisionId">
-                <option value="0" selected disabled>Select A Division</option>
-                <option *ngFor="let item of GroupDivisionList" [value]="item.divisionId">{{ item.name }}</option>
-              </select>
+              <div *ngFor="let item of GroupDivisionList" class="checkbox col-sm-3">
+                <label>
+                  <input type="checkbox" [value]="item.divisionId" (change)="onDivisionChange(item.divisionId, $event)"
+                         [checked]="selectedDivisions.includes(item.divisionId)" />
+                  {{ item.name }}
+                </label>
+              </div>
             </div>
           </div>
-          <!-- Name Field -->
           <div class="form-group">
             <label for="name" class="col-sm-2 control-label label-large">Zone Name</label>
             <div class="col-sm-8">
@@ -25,10 +27,16 @@
                      type="text"
                      class="form-control"
                      formControlName="name"
-                     placeholder="Enter zone name" />
+                     placeholder="Enter zone name"
+                     (input)="onSearch($event)" />
               <div *ngIf="ZoneForm.get('name')?.invalid && ZoneForm.get('name')?.touched" class="text-danger">
                 Zone Name is required.
               </div>
+              <ul *ngIf="locationSuggestions.length > 0" class="list-group">
+                <li *ngFor="let suggestion of locationSuggestions" class="list-group-item fs-4">
+                  {{ suggestion.location }}
+                </li>
+              </ul>
             </div>
           </div>
 

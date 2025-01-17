@@ -1,6 +1,6 @@
 <hr />
 <div class="header">
-  <h3>{{ isEditMode ? 'Update Designation Master' : 'Add Designation Master' }}</h3>
+  <h3>{{ isEditMode ? 'Update Designation' : 'Add Designation' }}</h3>
 </div>
 <br />
 <div class="row justify-content-center">
@@ -11,10 +11,13 @@
           <div class="form-group">
             <label for="field-1" class="col-sm-2 control-label label-large">Division</label>
             <div class="col-sm-8">
-              <select class="form-control" formControlName="groupDivisionId">
-                <option value="0" selected disabled>Select A Division</option>
-                <option *ngFor="let item of GroupDivisionList" [value]="item.divisionId">{{ item.name }}</option>
-              </select>
+              <div *ngFor="let item of GroupDivisionList" class="checkbox col-sm-3">
+                <label>
+                  <input type="checkbox" [value]="item.divisionId" (change)="onDivisionChange(item.divisionId, $event)"
+                         [checked]="selectedDivisions.includes(item.divisionId)" />
+                  {{ item.name }}
+                </label>
+              </div>
             </div>
           </div>
           <!-- Name Field -->
@@ -25,10 +28,16 @@
                      type="text"
                      class="form-control"
                      formControlName="designationName"
-                     placeholder="Enter designation name" />
+                     placeholder="Enter designation name"
+                     (input)="onSearch($event)" />
               <div *ngIf="DesignationForm.get('designationName')?.invalid && DesignationForm.get('designationName')?.touched" class="text-danger">
                 Designation Name is required.
               </div>
+              <ul *ngIf="designationSuggestions.length > 0" class="list-group">
+                <li *ngFor="let suggestion of designationSuggestions" class="list-group-item fs-4">
+                  {{ suggestion.designationName }}
+                </li>
+              </ul>
             </div>
           </div>
           <div class="form-group">

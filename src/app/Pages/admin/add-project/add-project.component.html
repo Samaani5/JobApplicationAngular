@@ -1,6 +1,6 @@
 <hr />
 <div class="header">
-  <h3>{{ isEditMode ? 'Update Project Master' : 'Add Project Master' }}</h3>
+  <h3>{{ isEditMode ? 'Update Project' : 'Add Project' }}</h3>
 </div>
 <br />
 <div class="row justify-content-center">
@@ -25,10 +25,16 @@
                      type="text"
                      class="form-control"
                      formControlName="projectName"
-                     placeholder="Enter project name" />
+                     placeholder="Enter project name"
+                     (input)="onSearch($event)"/>
               <div *ngIf="ProjectForm.get('projectName')?.invalid && ProjectForm.get('projectName')?.touched" class="text-danger">
                 Project Name is required.
               </div>
+              <ul *ngIf="projectSuggestions.length > 0" class="list-group">
+                <li *ngFor="let suggestion of projectSuggestions" class="list-group-item fs-4">
+                  {{ suggestion.projectName }} <!-- Display the correct 'name' property -->
+                </li>
+              </ul>
             </div>
           </div>
 

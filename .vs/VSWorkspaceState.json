@@ -5,9 +5,10 @@
     "\\src\\app",
     "\\src\\app\\Pages",
     "\\src\\app\\Pages\\admin",
-    "\\src\\app\\Pages\\admin\\applicant-list",
-    "\\src\\environments"
+    "\\src\\app\\Pages\\admin\\add-vacancies",
+    "\\src\\app\\Pages\\admin\\add-zone",
+    "\\src\\app\\Pages\\admin\\designation-list"
   ],
-  "SelectedNode": "\\src\\app\\Pages\\admin\\admin.component.ts",
+  "SelectedNode": "\\src\\app\\Pages\\admin\\add-vacancies\\add-vacancies.component.html",
   "PreviewInSolutionExplorer": false
 }

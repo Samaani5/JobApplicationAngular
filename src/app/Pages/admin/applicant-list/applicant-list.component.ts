@@ -33,6 +33,7 @@ export class ApplicantListComponent {
   ProjectList: ProjectItem[] = [];
   formData = {
     groupDivision: 0,
+    applicantId: 0,
     zone: '',
     designation: '',
     fromDate: '',
@@ -77,6 +78,8 @@ export class ApplicantListComponent {
   banks: Bank[] = [];
   verifyEmployeeForm: FormGroup;
   usession = new UserSession;
+  namesList: ApplicationlistRequest[] = [];
+
   constructor(private router: Router, private jobapplyservice: JobApplyService, private route: ActivatedRoute, private jobappservice: JobApplicationService,
     private applicantservice: ApplicantListService, private sanitizer: DomSanitizer, private fb: FormBuilder) {
     this.verifyEmployeeForm = this.fb.group({
@@ -228,7 +231,8 @@ export class ApplicantListComponent {
       });
   }
   GetSearchDataPhotoSmart() {
-    this.applicantReq.groupDivisionId = this.formData.groupDivision;
+    this.applicantReq.groupDivisionId = Number(this.formData.groupDivision);
+    this.applicantReq.applicantId = this.formData.applicantId;
     this.applicantReq.statusId = this.statusid;
     this.applicantReq.type = this.type;
     this.applicantReq.zoneId = Number(this.formData.zone);
@@ -322,6 +326,7 @@ export class ApplicantListComponent {
     this.jobappservice.getApplicantDetails(this.Applicantmodel).subscribe((data) => {
       if (data.status == 200) {
         this.employeeData = data.body;
+        this.MobileNo = mobileNo;
         if (this.employeeData.stateId)
           this.GetCity(Number(this.employeeData.stateId), 'permanent');
         if (this.employeeData.cStateId)
@@ -508,5 +513,35 @@ export class ApplicantListComponent {
   OnZoneChange(event: Event): void {
     const selectElement = event.target as HTMLSelectElement;
     this.GetSubDivision(selectElement.value);
+  }
+  SearchByName(name: string) {
+    if (name == '') {
+      this.namesList = [];
+      this.formData.applicantId = 0;
+    }
+    else {
+      const model = new EmployeeDetail();
+      model.groupDivisionId = Number(this.formData.groupDivision);
+      model.name = name;
+      this.applicantservice.SearchByName(model).subscribe(
+        (result: any) => {
+          if (result.status == 200) {
+            this.namesList = result.body;
+          }
+        },
+        (error: any) => {
+          Swal.fire({
+            text: error.message,
+            icon: "error"
+          });
+        });
+    }
+  }
+  onSelectName(model: ApplicationlistRequest) {
+    this.formData.applicantId = model.applicantId;
+    this.formData.searchQuery = model.name + ' - ' + model.designationName;
+    this.namesList = [];
+    this.GetSearchDataPhotoSmart();
+    this.groupid = Number(this.formData.groupDivision)
   }
 }

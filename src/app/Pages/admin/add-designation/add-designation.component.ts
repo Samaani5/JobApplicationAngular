@@ -1,5 +1,7 @@
 import { NgClass, NgFor, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { JobApplyService } from '../../../Services/JobApply/job-apply.service';
 import { AddDesignation } from '../../../Models/Masters/add-group-division';
@@ -19,6 +21,11 @@ export class AddDesignationComponent {
   submitted: boolean = false;
   addDesignation = new AddDesignation;
   GroupDivisionList: any;
+  allDesignationList: any[] = [];
+  designationSuggestions: any[] = [];
+  filteredDesignation: any[] = [];
+  selectedDivisions: number[] = [];
+  searchTerms = new Subject<string>(); 
   constructor(private fb: FormBuilder, private jobapplyservice: JobApplyService, private route: ActivatedRoute, private router: Router) {
     if (this.route.snapshot.params['id'] != null && this.route.snapshot.params['id'] != '' && this.route.snapshot.params['id'] != 'undefined') {
       this.GetDesignationById(Number(this.route.snapshot.params['id']));
@@ -28,18 +35,60 @@ export class AddDesignationComponent {
       designationId: [0],
       designationName: ['', Validators.required],
       designationCode: ['', Validators.required],
-      groupDivisionId: [0, Validators.required],
+      groupDivisionId: [[]],
       active: [1],
     });
     this.GetGroupdivisions();
   }
   ngOnInit(): void {
+    this.GetAllDesignations();
+    this.searchTerms
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        map((term) => this.filteredDesignations(term))
+      )
+      .subscribe((filtered) => {
+        this.filteredDesignation = filtered;
+      });
     const existingData = this.getEditData();
     if (existingData) {
       this.isEditMode = true;
       this.DesignationForm.patchValue(existingData);
     }
   }
+  GetAllDesignations() {
+    this.jobapplyservice.GetAllDesignations().subscribe(
+      (result: any) => {
+        if (result.status == 200) {
+          this.allDesignationList = result.body;
+        }
+      },
+      (error: any) => {
+        Swal.fire({
+          text: error.message,
+          icon: "error"
+        });
+      });
+  }
+  onSearch(event: Event): void {
+    const inputValue = (event.target as HTMLInputElement).value;
+
+    this.designationSuggestions = this.filteredDesignations(inputValue);
+  }
+  filteredDesignations(term: string): any[] {
+    if (!term) {
+      return [];
+    }
+    return this.allDesignationList.filter((designation) =>
+      designation.designationName.toLowerCase().includes(term.toLowerCase())
+    );
+  }
+
+  //selectDesignation(designation: any) {
+  //  this.DesignationForm.patchValue({ name: designation.designationName });
+  //  this.designationSuggestions = [];
+  //}
   getEditData() {
     return null;
   }
@@ -61,7 +110,7 @@ export class AddDesignationComponent {
   GetDesignationById(designationId: number) {
     this.addDesignation = {
       designationId: designationId,
-      groupDivisionId: 0,
+      groupDivisionId: [],
       designationName: '',
       designationCode: '',
       active: 1
@@ -71,12 +120,21 @@ export class AddDesignationComponent {
         if (result.status == 200) {
           const existingData = result.body;
           this.addDesignation.designationId = existingData.designationId;
-          this.addDesignation.groupDivisionId = existingData.groupDivisionId;
           this.addDesignation.designationName = existingData.designationName;
           this.addDesignation.designationCode = existingData.designationCode;
           this.addDesignation.active = existingData.active;
+          this.addDesignation.active = existingData.active; this.addDesignation.groupDivisionId = existingData.groupDivisionIds
+            .split(',')
+            .map((id: string) => parseInt(id.trim(), 10));
           this.isEditMode = true;
-          this.DesignationForm.patchValue(this.addDesignation);
+          this.selectedDivisions = this.addDesignation.groupDivisionId;
+          this.DesignationForm.patchValue({
+            designationId: this.addDesignation.designationId,
+            groupDivisionId: this.addDesignation.groupDivisionId,
+            designationName: this.addDesignation.designationName,
+            designationCode: this.addDesignation.designationCode,
+            active: this.addDesignation.active
+          });
         }
       },
       (error: any) => {
@@ -116,5 +174,17 @@ export class AddDesignationComponent {
           icon: "error"
         });
       });
+  }
+  onDivisionChange(divisionId: number, event: Event): void {
+    const isChecked = (event.target as HTMLInputElement).checked;
+    if (isChecked) {
+      this.selectedDivisions.push(divisionId);
+    } else {
+      const index = this.selectedDivisions.indexOf(divisionId);
+      if (index > -1) {
+        this.selectedDivisions.splice(index, 1);
+      }
+    }
+    this.DesignationForm.get('groupDivisionId')?.setValue(this.selectedDivisions);
   }
 }

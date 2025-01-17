@@ -1,14 +1,16 @@
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass, NgFor, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 import { AddGroupDivision } from '../../../Models/Masters/add-group-division';
 import { JobApplyService } from '../../../Services/JobApply/job-apply.service';
 declare var Swal: any;
 @Component({
   selector: 'app-add-group-division',
   standalone: true,
-  imports: [NgClass, NgIf, FormsModule, ReactiveFormsModule],
+  imports: [NgClass, NgIf, FormsModule, ReactiveFormsModule, NgFor],
   templateUrl: './add-group-division.component.html',
   styleUrl: './add-group-division.component.css'
 })
@@ -18,6 +20,10 @@ export class AddGroupDivisionComponent {
   submitted: boolean = false;
   addGroupDivision = new AddGroupDivision;
   groupDivisionId = 0;
+  allGroupDivisionList: any[] = []; 
+  groupDivisionSuggestions: any[] = [];
+  filteredGroupDivision: any[] = [];
+  searchTerms = new Subject<string>(); 
   constructor(private fb: FormBuilder, private jobapplyservice: JobApplyService, private route: ActivatedRoute, private router: Router) {
     if (this.route.snapshot.params['id'] != null && this.route.snapshot.params['id'] != '' && this.route.snapshot.params['id'] != 'undefined') {
       this.GetGroupdivisionById(Number(this.route.snapshot.params['id']));
@@ -30,7 +36,51 @@ export class AddGroupDivisionComponent {
     });
   }
   ngOnInit(): void {
+    this.GetAllGroupdivisions();
+
+    this.searchTerms
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        map((term) => this.filteredGroupDivisions(term))
+      )
+      .subscribe((filtered) => {
+        this.filteredGroupDivision = filtered;
+      });
+    
   }
+  GetAllGroupdivisions() {
+    this.jobapplyservice.GetAllGroupdivisions().subscribe(
+      (result: any) => {
+        if (result.status == 200) {
+          this.allGroupDivisionList = result.body;
+        }
+      },
+      (error: any) => {
+        Swal.fire({
+          text: error.message,
+          icon: "error"
+        });
+      });
+  }
+  onSearch(event: Event): void {
+    const inputValue = (event.target as HTMLInputElement).value;
+
+    this.groupDivisionSuggestions = this.filteredGroupDivisions(inputValue);
+  }
+  filteredGroupDivisions(term: string): any[] {
+    if (!term) {
+      return [];
+    }
+    return this.allGroupDivisionList.filter((groupDivision) =>
+      groupDivision.name.toLowerCase().includes(term.toLowerCase())
+    );
+  }
+
+  //selectGroupDivision(groupDivision: any) {
+  //  this.groupDivisionForm.patchValue({ name: groupDivision.name });
+  //  this.groupDivisionSuggestions = [];
+  //}
   GetGroupdivisionById(groupDivisionId: number) {
     this.addGroupDivision = {
       groupDivisionId: groupDivisionId,

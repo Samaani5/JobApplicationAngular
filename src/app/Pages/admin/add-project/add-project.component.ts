@@ -1,6 +1,8 @@
 import { NgClass, NgFor, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 import { JobApplyService } from '../../../Services/JobApply/job-apply.service';
 import { AddProject } from '../../../Models/Masters/add-group-division';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -19,7 +21,10 @@ export class AddProjectComponent {
   addProject = new AddProject;
   GroupDivisionList: any;
   projectId: number = 0;
-
+  allProjectList: any[] = [];
+  projectSuggestions: any[] = [];
+  filteredProject: any[] = [];
+  searchTerms = new Subject<string>(); 
   constructor(private fb: FormBuilder, private jobapplyservice: JobApplyService, private route: ActivatedRoute, private router: Router) {
     if (this.route.snapshot.params['id'] != null && this.route.snapshot.params['id'] != '' && this.route.snapshot.params['id'] != 'undefined') {
       this.GetProjectById(Number(this.route.snapshot.params['id']));
@@ -38,12 +43,55 @@ export class AddProjectComponent {
 
   }
   ngOnInit(): void {
+    this.GetAllProjects();
+
+    this.searchTerms
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        map((term) => this.filteredProjects(term))
+      )
+      .subscribe((filtered) => {
+        this.filteredProject = filtered;
+      });
     const existingData = this.getEditData();
     if (existingData) {
       this.isEditMode = true;
       this.ProjectForm.patchValue(existingData);
     }
   }
+  GetAllProjects() {
+    this.jobapplyservice.GetAllProjects().subscribe(
+      (result: any) => {
+        if (result.status == 200) {
+          this.allProjectList = result.body;
+        }
+      },
+      (error: any) => {
+        Swal.fire({
+          text: error.message,
+          icon: "error"
+        });
+      });
+  }
+  onSearch(event: Event): void {
+    const inputValue = (event.target as HTMLInputElement).value;
+
+    this.projectSuggestions = this.filteredProjects(inputValue);
+  }
+  filteredProjects(term: string): any[] {
+    if (!term) {
+      return [];
+    }
+    return this.allProjectList.filter((project) =>
+      project.projectName.toLowerCase().includes(term.toLowerCase())
+    );
+  }
+
+  //selectProject(project: any) {
+  //  this.ProjectForm.patchValue({ name: project.projectName });
+  //  this.projectSuggestions = [];
+  //}
   getEditData() {
     return null;
   }

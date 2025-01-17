@@ -1,6 +1,6 @@
 <hr />
 <div class="header">
-  <h3>{{ isEditMode ? 'Update Group Division Master' : 'Add Group Division Master' }}</h3>
+  <h3>{{ isEditMode ? 'Update Group Division' : 'Add Group Division' }}</h3>
 </div>
 <br />
 <div class="row justify-content-center">
@@ -16,10 +16,16 @@
                      type="text"
                      class="form-control"
                      formControlName="name"
-                     placeholder="Enter group division name" />
+                     placeholder="Enter group division name"
+                     (input)="onSearch($event)" />
               <div *ngIf="groupDivisionForm.get('name')?.invalid && groupDivisionForm.get('name')?.touched" class="text-danger">
                 Name is required.
               </div>
+              <ul *ngIf="groupDivisionSuggestions.length > 0" class="list-group">
+                <li *ngFor="let suggestion of groupDivisionSuggestions" class="list-group-item fs-4">
+                  {{ suggestion.name }} <!-- Display the correct 'name' property -->
+                </li>
+              </ul>
             </div>
           </div>
 
