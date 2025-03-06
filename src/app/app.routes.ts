@@ -27,6 +27,8 @@ import { FinalJobApplicationDetailsComponent } from './Pages/home/final-job-appl
 import { ItApplicationDetailsComponent } from './Pages/admin/it-application-details/it-application-details.component';
 import { SubDivisionListComponent } from './Pages/admin/sub-division-list/sub-division-list.component';
 import { AddSubDivisionComponent } from './Pages/admin/add-sub-division/add-sub-division.component';
+import { StepMasterListComponent } from './Pages/admin/step-master-list/step-master-list.component';
+import { AddStepMasterComponent } from './Pages/admin/add-step-master/add-step-master.component';
 
 export const routes: Routes = [
   {
@@ -64,8 +66,11 @@ export const routes: Routes = [
       { path: 'zone-list', component: ZoneListComponent, canActivate: [AuthGuardService] },
       { path: 'sub-division-list', component: SubDivisionListComponent, canActivate: [AuthGuardService] },
       { path: 'add-sub-division', component: AddSubDivisionComponent, canActivate: [AuthGuardService] },
-      { path: 'add-sub-division/:id', component: AddSubDivisionComponent, canActivate: [AuthGuardService] },
+      { path: 'add-sub-division/:id/:groupDivisionId', component: AddSubDivisionComponent, canActivate: [AuthGuardService] },
       { path: 'it-application-details', component: ItApplicationDetailsComponent, canActivate: [AuthGuardService] },
+      { path: 'step-master-list', component: StepMasterListComponent, canActivate: [AuthGuardService] },
+      { path: 'add-step-master', component: AddStepMasterComponent, canActivate: [AuthGuardService] },
+      { path: 'add-step-master/:id', component: AddStepMasterComponent, canActivate: [AuthGuardService] },
     ]
   }
 ];

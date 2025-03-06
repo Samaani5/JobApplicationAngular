@@ -1,0 +1,65 @@
+<hr />
+<div class="header">
+  <h3>{{ isEditMode ? 'Update Step' : 'Add Step' }}</h3>
+</div>
+<br />
+<div class="row justify-content-center">
+  <div class="col-md-10">
+    <div class="panel panel-primary" data-collapsed="0">
+      <div class="panel-body">
+        <form [formGroup]="StepForm" (ngSubmit)="onSubmit()" class="form-horizontal form-groups-bordered">
+          <div class="form-group">
+            <label for="name" class="col-sm-2 control-label label-large">Step Name</label>
+            <div class="col-sm-8">
+              <input id="name"
+                     type="text"
+                     class="form-control"
+                     formControlName="name"
+                     placeholder="Enter step name"
+                     (input)="onSearch($event)" />
+              <div *ngIf="StepForm.get('name')?.invalid && StepForm.get('name')?.touched" class="text-danger">
+                Zone Name is required.
+              </div>
+              <ul *ngIf="stepSuggestions.length > 0" class="list-group">
+                <li *ngFor="let suggestion of stepSuggestions" class="list-group-item fs-4">
+                  {{ suggestion.name }}
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="name" class="col-sm-2 control-label label-large">Order Number</label>
+            <div class="col-sm-8">
+              <input id="orderNo"
+                     type="number"
+                     class="form-control"
+                     formControlName="orderNo"
+                     placeholder="Enter order no."/>
+              <div *ngIf="StepForm.get('orderNo')?.invalid && StepForm.get('orderNo')?.touched" class="text-danger">
+                Order No is required.
+              </div>
+            </div>
+          </div>
+          <!-- Active Field (Visible in Edit Mode) -->
+          <div class="form-group" *ngIf="isEditMode">
+            <label for="active" class="col-sm-2 control-label label-large">Active</label>
+            <div class="col-sm-8">
+              <select id="active" class="form-control" formControlName="active">
+                <option [value]="1">Active</option>
+                <option [value]="0">Inactive</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-5 col-sm-5">
+              <button type="submit" class="btn btn-default label-large" [disabled]="StepForm.invalid">
+                {{ isEditMode ? 'Update' : 'Add' }}
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+

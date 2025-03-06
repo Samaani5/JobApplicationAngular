@@ -34,10 +34,49 @@ export class JobApplicationFormRequest {
   'panNo': string;
   'esiNo': string;
   'fatherMobileNo': string;
+  'flag': string;
 }
 
+export class EmpBasic {
+  "name": string;
+  "fatherName": string;
+  "dateOfBirth": string;
+  "gender": string;
+  "maritalStatus": string;
+  "emailAddress": string;
+  "mobileNo": string;
+  "permanentAddress": string;
+  "pinCode": string;
+  "stateId": number;
+  "districtId": number;
+  "correspondenceAddress": string;
+  "cPinCode": string;
+  "cStateId": number;
+  "cDistrictId": number;
+  "fatherMobileNo": string;
+  "revenueId": number;
+}
 
-
+export class EmpBank {
+  'mrid': string;  
+  'bankAccountNo': string;  
+  'bankId': number;  
+  'adharNo': string;
+  'ifscCode': string;
+  'panNo': string;
+  'esiNo': string;
+  'uanNo': string;
+  'mobileNo': string;
+}
+export class EmpFiles {
+  'panFile': File;
+  'resumeFile': File;
+  'qualificationFile': File;
+  'adharFile': File;
+  'bankStatementFile': File;
+  'passportPhoto': File;
+  'mobileNo': string;
+}
 export class JobApplicationFormRequestIO {
   'revenueId': string;
   'gender': string;

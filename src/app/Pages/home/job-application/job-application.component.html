@@ -6,8 +6,8 @@
           <div class="switch">
             <input id="language-toggle" class="check-toggle check-toggle-round-flat" type="checkbox" [(ngModel)]="language" (change)="onLanguageChange()">
             <label for="language-toggle"></label>
-            <span class="on">EN</span>
-            <span class="off">HN</span>
+            <span class="off">EN</span>
+            <span class="on">HN</span>
           </div>
         </div>
         <h5 class="text-center">{{ position }} | {{projectName}} | {{locationName}}</h5><hr />
@@ -20,9 +20,10 @@
               <label for="inputDivision" id="labelDivision" class="col-sm-2 col-form-label">{{labels.labelDivision}}<span class="text-danger">*</span></label>
               <div class="col-sm-10">
                 <select formControlName="revenueId" class="form-select" required>
-                  <option [value]="0" disabled>Select a Division</option>
+                  <option value="" disabled>Select a Division</option>
                   <option *ngFor="let sd of subDivisions" [value]="sd.id">{{ sd.name }}</option>
                 </select>
+                <span class="text-danger" *ngIf="f['revenueId'].invalid && f['revenueId'].touched">Location is required</span>
               </div>
             </div>
 
@@ -131,7 +132,7 @@
               <label for="inputPermanentDistrict" class="col-sm-2 col-form-label" id="labelDistrict">{{labels.labelDistrict}}<span class="text-danger">*</span></label>
               <div class="col-sm-10">
                 <select class="form-select" id="inputPermanentDistrict" formControlName="districtId" required>
-                  <option value="0" selected disabled>Select District</option>
+                  <option value="" selected disabled>Select District</option>
                   <option *ngFor="let district of districtsForState" [value]="district.id">{{ district.name }}</option>
                 </select>
               </div>
@@ -166,7 +167,7 @@
               <label for="inputCorrespondenceState" id="labelCStateId" class="col-sm-2 col-form-label">{{labels.labelCStateId}}</label>
               <div class="col-sm-10">
                 <select class="form-select" id="inputCorrespondenceState" formControlName="cStateId" (change)="onStateChange($event, 'correspondence')" required>
-                  <option value="0" disabled>Select State</option>
+                  <option value="" disabled>Select State</option>
                   <option *ngFor="let state of states" [value]="state.id">{{ state.name }}</option>
                 </select>
               </div>
@@ -176,7 +177,7 @@
               <label for="inputCorrespondenceDistrict" id="labelCDistrict" class="col-sm-2 col-form-label">{{labels.labelCDistrict}}</label>
               <div class="col-sm-10">
                 <select class="form-select" id="inputCorrespondenceDistrict" formControlName="cDistrictId" required>
-                  <option value="0" selected disabled>Select District</option>
+                  <option value="" selected disabled>Select District</option>
                   <option *ngFor="let district of districtsForCorrespondenceState" [value]="district.id">{{ district.name }}</option>
                 </select>
               </div>
@@ -241,7 +242,7 @@
               <label for="inputBankName" id="labelBankName" class="col-sm-2 col-form-label">{{labels.labelBankName}}<span class="text-danger">*</span></label>
               <div class="col-sm-10">
                 <select class="form-select" id="inputBankName" formControlName="bankId" required>
-                  <option value="0">Select Bank Name</option>
+                  <option value="">Select Bank Name</option>
                   <option *ngFor="let bank of banks" [value]="bank.id">{{ bank.name }}</option>
                 </select>
                 <div *ngIf="g['bankId'].invalid && g['bankId'].touched" class="text-danger">

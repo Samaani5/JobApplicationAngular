@@ -90,4 +90,5 @@ export class SubDivisionList {
   'name': string;
   'active': number;
   'zoneId': number;
+  'groupDivisionId': number;
 }

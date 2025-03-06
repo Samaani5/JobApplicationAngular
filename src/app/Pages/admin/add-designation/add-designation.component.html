@@ -18,6 +18,9 @@
                   {{ item.name }}
                 </label>
               </div>
+              <div *ngIf="DesignationForm.get('groupDivisionId')?.invalid && DesignationForm.get('groupDivisionId')?.touched" class="text-danger">
+                Please select at least one division.
+              </div>
             </div>
           </div>
           <!-- Name Field -->

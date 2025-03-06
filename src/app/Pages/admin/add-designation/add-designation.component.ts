@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { JobApplyService } from '../../../Services/JobApply/job-apply.service';
 import { AddDesignation } from '../../../Models/Masters/add-group-division';
 import { ActivatedRoute, Router } from '@angular/router';
+import { atLeastOneCheckboxChecked } from '../../../Validators/customvalidator';
 declare var Swal: any;
 
 @Component({
@@ -35,7 +36,7 @@ export class AddDesignationComponent {
       designationId: [0],
       designationName: ['', Validators.required],
       designationCode: ['', Validators.required],
-      groupDivisionId: [[]],
+      groupDivisionId: [[], atLeastOneCheckboxChecked()],
       active: [1],
     });
     this.GetGroupdivisions();

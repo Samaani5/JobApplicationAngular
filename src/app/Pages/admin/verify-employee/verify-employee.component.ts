@@ -227,6 +227,7 @@ export class VerifyEmployeeComponent {
     return `${years} years and ${months} months`;
   }
   onVerify() {
+    const formattedDateOfBirth = this.formatDate(this.applicantData.dateOfBirth.toString());
     this.applicantReq.adharNo = this.verifyEmployeeForm.get('adharNo')?.value;
     this.applicantReq.panNo = this.verifyEmployeeForm.get('panNo')?.value;
     this.applicantReq.bankAccountNo = this.verifyEmployeeForm.get('bankAccountNo')?.value;
@@ -245,6 +246,7 @@ export class VerifyEmployeeComponent {
     this.applicantReq.employmentType = this.verifyEmployeeForm.get('employmenttype')?.value;
     this.applicantReq.applicantId = this.applicantData.applicantId;
     this.applicantReq.loginEmail = this.usession.emailAddress;
+    this.applicantReq.dateofbirth = formattedDateOfBirth;
     this.applicantReq.status = 'Verified';
     this.fetchApplicationData(this.applicantReq);
     Swal.fire({
@@ -495,5 +497,15 @@ export class VerifyEmployeeComponent {
     const dptId = (event.target as HTMLSelectElement).value;
     this.GetDesignationListByDepartmentId(dptId, this.companyId);
     this.GetSubDivisionListByDepartmentId(Number(dptId), this.bgName);
+  }
+  formatDate(date: string): string {
+    if (!date) {
+      return '';
+    }
+    const d = new Date(date);
+    const day = ('0' + d.getDate()).slice(-2);
+    const month = ('0' + (d.getMonth() + 1)).slice(-2);
+    const year = d.getFullYear();
+    return `${day}/${month}/${year}`;
   }
 }

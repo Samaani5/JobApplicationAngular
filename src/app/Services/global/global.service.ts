@@ -29,4 +29,10 @@ export class GlobalService {
   postWithoutResponse(url: string, obj: any): Observable<any> {
     return this.http.post(url, obj, { headers: this.headerService.getAPIHeadersWithoutAuth() });
   }
+  postForBlob(url: string, obj: any): Observable<Blob> {
+    return this.http.post(url, obj, {
+      headers: this.headerService.getAPIHeadersWithAuth(),
+      responseType: 'blob',
+    });
+  }
 }

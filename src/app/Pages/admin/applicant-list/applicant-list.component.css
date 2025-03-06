@@ -234,6 +234,18 @@
 .modal-dialog {
   width: auto;
 }
+.userlisttable {
+  cursor: pointer;
+  /*font-size: medium;*/
+  font-weight: 500;
+}
+  .userlisttable:hover {
+    color: #5c6f9b !important;
+  }
+  .userlisttable.active {
+    color: #5c6f9b !important;
+    background-color: rgba(0, 0, 0, 0.05);
+  }
 
 
 

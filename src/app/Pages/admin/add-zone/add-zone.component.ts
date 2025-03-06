@@ -1,12 +1,13 @@
 import { NgClass, NgFor, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { AddZone } from '../../../Models/Masters/add-group-division';
 import { UserSession } from '../../../Models/UserSession/user-session';
 import { JobApplyService } from '../../../Services/JobApply/job-apply.service';
+import { atLeastOneCheckboxChecked } from '../../../Validators/customvalidator';
 declare var Swal: any;
 
 @Component({
@@ -38,7 +39,7 @@ export class AddZoneComponent {
       zoneId: [0],
       name: ['', Validators.required],
       emailAddress: [''],
-      groupDivisionId: [[]],
+      groupDivisionId: [[], atLeastOneCheckboxChecked()],
       active: [1],
     });
     this.GetGroupdivisions();
@@ -93,12 +94,10 @@ export class AddZoneComponent {
       location.location.toLowerCase().includes(term.toLowerCase()) 
     );
   }
-
   selectLocation(location: any) {
     this.ZoneForm.patchValue({ name: location.location });
     this.locationSuggestions = []; 
   }
-
  getEditData() {
     return null;
   }
@@ -154,6 +153,7 @@ export class AddZoneComponent {
   onSubmit(): void {
     this.submitted = true;
     if (this.ZoneForm.invalid) {
+      this.ZoneForm.markAllAsTouched();
       return;
     }
     this.ZoneForm.patchValue({ emailAddress: this.usession.emailAddress });

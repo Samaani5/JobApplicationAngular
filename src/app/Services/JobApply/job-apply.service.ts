@@ -2,7 +2,7 @@ import { HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { AddDesignation, AddGroupDivision, AddProject, AddSubDivision, AddZone, PayrollDataRequest } from '../../Models/Masters/add-group-division';
+import { AddDesignation, AddGroupDivision, AddProject, AddStepMaster, AddSubDivision, AddZone, PayrollDataRequest } from '../../Models/Masters/add-group-division';
 import { SendOTPRequest } from '../../Models/SendOTP/send-otprequest';
 import { GlobalService } from '../global/global.service';
 
@@ -128,5 +128,17 @@ export class JobApplyService {
   GetSubDivisionListByDepartmentId(model: PayrollDataRequest): Observable<any> {
     let url: string = environment.apiUrl + 'Master/GetSubDivisionListByDepartmentId';
     return this.http.post(url, model);
+  }
+  AddStepMaster(model: AddStepMaster): Observable<any> {
+    let url: string = environment.apiUrl + 'Master/AddStepMaster';
+    return this.http.post(url, model);
+  }
+  GetStepById(model: AddStepMaster): Observable<any> {
+    let url: string = environment.apiUrl + 'Master/GetStepById';
+    return this.http.post(url, model);
+  }
+  GetAllSteps(): Observable<any> {
+    let url: string = environment.apiUrl + 'Master/GetAllSteps';
+    return this.http.post(url, null);
   }
 }

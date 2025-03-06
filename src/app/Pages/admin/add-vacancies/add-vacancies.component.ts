@@ -169,7 +169,7 @@ export class AddVacanciesComponent {
         fromDate: this.vacancyForm.value.fromDate,
         toDate: this.vacancyForm.value.toDate,
         emailAddress: this.usession.emailAddress,
-        statusId: 1,
+        statusId: this.vacancyForm.value.statusId,
         vacancyId: this.vacancyForm.value.vacancyId,
         projectId: Number(this.vacancyForm.value.projectId)
       };

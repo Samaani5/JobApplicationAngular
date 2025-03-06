@@ -1,6 +1,6 @@
 import { NgClass, NgFor, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { JobApplyService } from '../../../Services/JobApply/job-apply.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
@@ -31,9 +31,11 @@ export class AddSubDivisionComponent {
   searchTerms = new Subject<string>();
     usession = new UserSession;
    constructor(private fb: FormBuilder, private jobapplyservice: JobApplyService, private route: ActivatedRoute, private router: Router) {
-    this.usession = JSON.parse((sessionStorage.getItem('session') || '{}'));
-    if (this.route.snapshot.params['id'] != null && this.route.snapshot.params['id'] != '' && this.route.snapshot.params['id'] != 'undefined') {
-      this.GetSubDivisionById(Number(this.route.snapshot.params['id']));
+     this.usession = JSON.parse((sessionStorage.getItem('session') || '{}'));
+     const id = this.route.snapshot.paramMap.get('id');
+     const groupDivisionId = this.route.snapshot.paramMap.get('groupDivisionId');
+    if (id != null && id != '' && id != 'undefined') {
+      this.GetSubDivisionById(Number(id), Number(groupDivisionId));
       this.isEditMode = true;
     }
     this.SubDivisionForm = this.fb.group({
@@ -42,10 +44,33 @@ export class AddSubDivisionComponent {
       emailAddress: [''],
       zoneId: [0, Validators.required],
       groupDivisionId: [0, Validators.required],
+      mrCount: [0, Validators.required],
+      svCount: [0, Validators.required],
       active: [1],
-    });
+    }, { validators: this.validateCounts });
     this.GetGroupdivisions();
   }
+  validateCounts(formGroup: AbstractControl): ValidationErrors | null {
+    const mrCountControl = formGroup.get('mrCount');
+    const svCountControl = formGroup.get('svCount');
+    let hasError = false;
+    if (mrCountControl?.value <= 0) {
+      mrCountControl?.setErrors({ invalidCount: 'MR Count must be greater than 0' });
+      hasError = true;
+    } else {
+      mrCountControl?.setErrors(null);
+    }
+
+    if (svCountControl?.value <= 0) {
+      svCountControl?.setErrors({ invalidCount: 'SV Count must be greater than 0' });
+      hasError = true;
+    } else {
+      svCountControl?.setErrors(null);
+    }
+
+    return hasError ? { invalidForm: true } : null;
+  }
+
   ngOnInit(): void {
     this.GetAllSubDivision();
     this.searchTerms
@@ -126,7 +151,7 @@ export class AddSubDivisionComponent {
       });
   }
 
-  GetSubDivisionById(revenueId: number) {
+  GetSubDivisionById(revenueId: number, groupDivisionId: number) {
     this.addSubDivision = {
       id: revenueId,
       revenueId:0,
@@ -135,8 +160,10 @@ export class AddSubDivisionComponent {
       emailAddress: '',
       townType: '',
       name:'',
-      groupDivisionId: 0,
-      active: 1
+      groupDivisionId: groupDivisionId,
+      active: 1,
+      mrCount: 0,
+      svCount: 0
     }
     this.jobapplyservice.GetSubDivisionById(this.addSubDivision).subscribe(
       (result: any) => {
@@ -148,6 +175,8 @@ export class AddSubDivisionComponent {
           this.addSubDivision.revenueTown = existingData.revenueTown;
           this.addSubDivision.emailAddress = existingData.emailAddress;
           this.addSubDivision.active = existingData.active;
+          this.addSubDivision.mrCount = existingData.mrCount;
+          this.addSubDivision.svCount = existingData.svCount;
           this.isEditMode = true;
           this.GetLocation(this.addSubDivision.groupDivisionId);
           this.SubDivisionForm.patchValue(this.addSubDivision);

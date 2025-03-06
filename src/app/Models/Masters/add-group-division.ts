@@ -33,6 +33,15 @@ export class AddSubDivision {
   "name": string;
   "id": number;
   "groupDivisionId": number;
+  "mrCount": number;
+  "svCount": number;
+}
+export class AddStepMaster {
+  'stepId': number;
+  'name': string;
+  'orderNo': number;
+  'active': number;
+  'emailAddress': string;
 }
 export class PayrollDataRequest {
   'companyId': number;

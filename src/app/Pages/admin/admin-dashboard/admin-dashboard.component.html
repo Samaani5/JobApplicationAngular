@@ -58,7 +58,7 @@
               <div class="tab-content">
                 <div class="tab-pane" [class.active]="isActiveTab(i, 'year')" id="line-chart_{{i}}">
                   <div class="list-group" *ngFor="let item of group.value; let j = index">
-                    <a (click)="item.applicantCount > 0 ? navigateToApplicantList(group.key, item.groupDivisionId, item.statusId, 'Year') : $event.preventDefault()" class="list-group-item" *ngIf="(group.key !== 'Photo Billing' && group.key !== 'Smart Meter') || (item.statusName !== 'Interview' && item.statusName !== 'Offered')" [ngClass]="{'disabled-link': item.applicantCount < 1}">
+                    <a (click)="item.applicantCount > 0 ? navigateToApplicantList(group.key, item.groupDivisionId, item.statusId, 'Year') : $event.preventDefault()" class="list-group-item" [ngClass]="{'disabled-link': item.applicantCount < 1}">
                       <span class="badge" [ngClass]="getbadgeColor(j)">{{item.applicantCount}}</span>
                       {{item.statusName}}
                     </a>
@@ -66,7 +66,7 @@
                 </div>
                 <div class="tab-pane" [class.active]="isActiveTab(i, 'month')" id="pie-chart_{{i}}">
                   <div class="list-group" *ngFor="let item of groupedDataMonth[group.key]; let j = index">
-                    <a (click)="item.applicantCount > 0 ? navigateToApplicantList(group.key, item.groupDivisionId, item.statusId, 'Month') : $event.preventDefault()" class="list-group-item" *ngIf="(group.key !== 'Photo Billing' && group.key !== 'Smart Meter') || (item.statusName !== 'Interview' && item.statusName !== 'Offered')" [ngClass]="{'disabled-link': item.applicantCount < 1}">
+                    <a (click)="item.applicantCount > 0 ? navigateToApplicantList(group.key, item.groupDivisionId, item.statusId, 'Month') : $event.preventDefault()" class="list-group-item" [ngClass]="{'disabled-link': item.applicantCount < 1}">
                       <span class="badge" [ngClass]="getbadgeColor(j)">{{item.applicantCount}}</span>
                       {{item.statusName}}
                     </a>

@@ -38,6 +38,10 @@ export class ApplicantListService {
     let url: string = environment.apiUrl + 'Report/GetDataForVerify';
     return this.http.post(url, model);
   }
+  GetDataForVerifyByApplicantId(model: Applicationlist): Observable<any> {
+    let url: string = environment.apiUrl + 'Report/GetDataForVerifyByApplicantId';
+    return this.http.post(url, model);
+  }
   UpdateApplicantDetail(model: Applicationlist): Observable<any> {
     let url: string = environment.apiUrl + 'Report/UpdateApplicantDetail';
     return this.http.post(url, model);
@@ -61,5 +65,9 @@ export class ApplicantListService {
   SearchByName(model: EmployeeDetail): Observable<any> {
     let url: string = environment.apiUrl + 'Report/SearchByName';
     return this.http.post(url, model);
+  }
+  generateApplicantPdf(model: EmployeeDetail): Observable<Blob> {
+    let url: string = environment.apiUrl + 'Employee/EmployeePDF';
+    return this.http.postForBlob(url, model);
   }
 }

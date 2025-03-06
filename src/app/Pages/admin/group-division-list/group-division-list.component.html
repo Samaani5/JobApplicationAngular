@@ -23,7 +23,7 @@
                             <tr *ngFor="let item of paginatedgroupDivisionList; let i = index">
                                 <td>{{ (currentPage - 1) * itemsPerPage + i + 1 }}</td>
                                 <td>{{item.name}}</td>
-                                <td style="cursor:pointer">{{item.active==1?"Active":"Inactive"}}</td>
+                                <td>{{item.active==1?"Active":"Inactive"}}</td>
                                 <td><a class="btn p-0 fs-4" routerLink="/admin/add-group-division/{{item.divisionId}}"><i class="entypo entypo-pencil"></i></a></td>
                             </tr>
                         </tbody>

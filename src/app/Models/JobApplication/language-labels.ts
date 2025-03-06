@@ -125,4 +125,12 @@ export class SubDivision {
   'name': string;
   'id': number;
 }
+export class EmpStatus {
+  'name': string;
+  'id': number;
+  'statusName': string;
+  'createdDate': Date;
+  'actionBy': string;
+}
+
 

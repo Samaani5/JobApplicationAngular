@@ -1,6 +1,6 @@
 import { CommonModule, DatePipe, NgFor, NgIf, TitleCasePipe } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Router, RouterLink } from '@angular/router';
 import { Bank, District, LanguageLabels, State, SubDivision } from '../../../Models/JobApplication/language-labels';
@@ -8,7 +8,7 @@ import { JobApplicationService } from '../../../Services/JobApplication/job-appl
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
-import { JobApplicationFormRequest } from '../../../Models/JobApplication/job-application-form-request';
+import { EmpBank, EmpBasic, EmpFiles, JobApplicationFormRequest } from '../../../Models/JobApplication/job-application-form-request';
 import { SendOTPRequest } from '../../../Models/SendOTP/send-otprequest';
 declare var Swal: any;
 declare var $: any;
@@ -40,6 +40,7 @@ export class JobApplicationComponent {
   banks: Bank[] = [];
   subDivisions: SubDivision[] = [];
   applicationData: JobApplicationFormRequest = new JobApplicationFormRequest();
+  empfiles = new EmpFiles();
   minDate = new Date(2000, 0, 1);
   maxDate = new Date(2020, 0, 1);
   currentStep: number = 1;
@@ -55,7 +56,7 @@ export class JobApplicationComponent {
       this.projectName = 'PhotoBilling';
     this.locationName = JSON.parse(sessionStorage.getItem('locationName') || '')
     this.jobApplicationForm = this.fb.group({
-      revenueId: [0, Validators.required],
+      revenueId: ['', Validators.required],
       name: ['', Validators.required],
       fatherName: ['', Validators.required],
       dateOfBirth: ['', Validators.required],
@@ -101,9 +102,9 @@ export class JobApplicationComponent {
     this.jobApplicationForm.get('cStateId')?.setValue(3);
     this.GetCity(3, 'permanent');
     this.GetCity(3, 'correspondence');
-    this.jobApplicationForm.get('districtId')?.setValue(0);
-    this.jobApplicationForm.get('cDistrictId')?.setValue(0);
-    this.changeLabels('en');
+    this.jobApplicationForm.get('districtId')?.setValue('');
+    this.jobApplicationForm.get('cDistrictId')?.setValue('');
+    this.changeLabels('hn');
   }
 
   formatDate(date: string): string {
@@ -126,50 +127,54 @@ export class JobApplicationComponent {
       otp: ''
     };
     this.jobappservice.getUserDetails(this.SendOtpmodel).subscribe((data: any) => {
-      this.applicationData = data.body[0];
-      const formattedDateOfBirth = this.formatDate(this.applicationData.dateOfBirth);
-      this.jobApplicationForm.patchValue({
-        revenueId: this.applicationData.revenueId,
-        name: this.applicationData.name,
-        fatherName: this.applicationData.fatherName,
-        dateOfBirth: formattedDateOfBirth,
-        gender: this.applicationData.gender || 'Male',
-        maritalStatus: this.applicationData.maritalStatus || '',
-        emailAddress: this.applicationData.emailAddress,
-        mobileNo: this.applicationData.mobileNo,
-        permanentAddress: this.applicationData.permanentAddress,
-        stateId: this.applicationData.stateId || '',
-        districtId: this.applicationData.districtId,
-        pinCode: this.applicationData.pinCode,
-        cAddress: this.applicationData.cAddress,
-        cStateId: this.applicationData.cStateId || '0',
-        cDistrictId: this.applicationData.cDistrictId,
-        cPinCode: this.applicationData.cPinCode,
-        fatherMobileNo: this.applicationData.fatherMobileNo,
-      });
-      if (this.applicationData.stateId)
-        this.GetCity(Number(this.applicationData.stateId), 'permanent');
-      if (this.applicationData.cStateId)
-        this.GetCity(Number(this.applicationData.stateId), 'correspondence');
-      this.BankDetailsForm.patchValue({
-        uanNo: this.applicationData.uanNo,
-        esiNo: this.applicationData.esiNo,
-        panNo: this.applicationData.panNo,
-        bankId: this.applicationData.bankId,
-        bankAccountNo: this.applicationData.bankAccountNo,
-        ifscCode: this.applicationData.ifscCode,
-        adharNo: this.applicationData.adharNo,
-        mrid: this.applicationData.mrid,
-      });
+      if (data?.body && data.body.length > 0) {
+        this.applicationData = data.body[0];
+        const formattedDateOfBirth = this.formatDate(this.applicationData.dateOfBirth);
+        if (this.applicationData.stateId)
+          this.GetCity(Number(this.applicationData.stateId), 'permanent');
+        if (this.applicationData.cStateId)
+          this.GetCity(Number(this.applicationData.stateId), 'correspondence');
+        this.jobApplicationForm.patchValue({
+          revenueId: this.subDivisions.some(subDivision => subDivision.id === Number(this.applicationData.revenueId))
+            ? this.applicationData.revenueId
+            : '',
+          name: this.applicationData.name,
+          fatherName: this.applicationData.fatherName,
+          dateOfBirth: formattedDateOfBirth,
+          gender: this.applicationData.gender || 'Male',
+          maritalStatus: this.applicationData.maritalStatus || '',
+          emailAddress: this.applicationData.emailAddress,
+          mobileNo: this.applicationData.mobileNo,
+          permanentAddress: this.applicationData.permanentAddress,
+          stateId: Number(this.applicationData.stateId) == 0 ? '' :this.applicationData.stateId,
+          districtId: Number(this.applicationData.districtId) == 0 ? '' : this.applicationData.districtId,
+          pinCode: this.applicationData.pinCode,
+          cAddress: this.applicationData.cAddress,
+          cStateId: Number(this.applicationData.cStateId) == 0 ? '' : this.applicationData.cStateId,
+          cDistrictId: Number(this.applicationData.cDistrictId) == 0 ? '' : this.applicationData.cDistrictId,
+          cPinCode: this.applicationData.cPinCode,
+          fatherMobileNo: this.applicationData.fatherMobileNo,
+        });
+        this.BankDetailsForm.patchValue({
+          uanNo: this.applicationData.uanNo,
+          esiNo: this.applicationData.esiNo,
+          panNo: this.applicationData.panNo,
+          bankId: Number(this.applicationData.bankId) == 0 ? '' : this.applicationData.bankId,
+          bankAccountNo: this.applicationData.bankAccountNo,
+          ifscCode: this.applicationData.ifscCode,
+          adharNo: this.applicationData.adharNo,
+          mrid: this.applicationData.mrid,
+        });
 
-      this.UploadFilesForm.patchValue({
-        panFile: this.applicationData.panFile,
-        adharFile: this.applicationData.adharFile,
-        qualificationFile: this.applicationData.qualificationFile,
-        bankStatementFile: this.applicationData.bankStatementFile,
-        resumeFile: this.applicationData.resumeFile,
-        passportPhoto: this.applicationData.passportPhoto,
-      });
+        this.UploadFilesForm.patchValue({
+          panFile: this.applicationData.panFile,
+          adharFile: this.applicationData.adharFile,
+          qualificationFile: this.applicationData.qualificationFile,
+          bankStatementFile: this.applicationData.bankStatementFile,
+          resumeFile: this.applicationData.resumeFile,
+          passportPhoto: this.applicationData.passportPhoto,
+        });
+      }
     });
   }
   onStateChange(event: any, type: string): void {
@@ -229,8 +234,11 @@ export class JobApplicationComponent {
   }
 
   submitJobApplicationForm(): void {
-    Object.assign(this.applicationData, this.jobApplicationForm.value);
-    this.jobappservice.submitApplication(this.applicationData).subscribe(
+    const basic = new EmpBasic();
+    this.jobApplicationForm.get('mobileNo')?.enable();
+    Object.assign(basic, this.jobApplicationForm.value);
+    basic.correspondenceAddress = this.jobApplicationForm.controls['cAddress'].value
+    this.jobappservice.BasicDetail(basic).subscribe(
       (result: any) => {
         if (result.status == 200) {
           Swal.fire('Success!', 'Basic Details submitted successfully.', 'success').then(() => {
@@ -245,8 +253,10 @@ export class JobApplicationComponent {
   }
 
   submitBankDetailsForm(): void {
-    Object.assign(this.applicationData, this.BankDetailsForm.value);
-    this.jobappservice.submitApplication(this.applicationData).subscribe(
+    const bank = new EmpBank();
+    Object.assign(bank, this.BankDetailsForm.value);
+    bank.mobileNo = this.MobileNo;
+    this.jobappservice.BankDetail(bank).subscribe(
       (result: any) => {
         if (result.status == 200) {
           Swal.fire('Success!', 'Bank details submitted successfully.', 'success').then(() => {
@@ -261,7 +271,8 @@ export class JobApplicationComponent {
   }
 
   submitUploadFilesForm(): void {
-    this.jobappservice.submitApplication(this.applicationData).subscribe(
+    this.empfiles.mobileNo = this.MobileNo;
+    this.jobappservice.SubmitApplication(this.empfiles).subscribe(
       (result: any) => {
         if (result.status == 200) {
           Swal.fire({
@@ -340,22 +351,22 @@ export class JobApplicationComponent {
       else {
         switch (fieldName) {
           case 'adharFile':
-            this.applicationData.adharFile = file;
+            this.empfiles.adharFile = file;
             break;
           case 'panFile':
-            this.applicationData.panFile = file;
+            this.empfiles.panFile = file;
             break;
           case 'qualificationFile':
-            this.applicationData.qualificationFile = file;
+            this.empfiles.qualificationFile = file;
             break;
           case 'bankStatementFile':
-            this.applicationData.bankStatementFile = file;
+            this.empfiles.bankStatementFile = file;
             break;
           case 'resumeFile':
-            this.applicationData.resumeFile = file;
+            this.empfiles.resumeFile = file;
             break;
           case 'passportPhoto':
-            this.applicationData.passportPhoto = file;
+            this.empfiles.passportPhoto = file;
             break;
           default:
             console.error('Unknown field name:', fieldName);
@@ -364,7 +375,7 @@ export class JobApplicationComponent {
     }
   }
   onLanguageChange(): void {
-    this.changeLabels(this.language ? 'hn' : 'en');
+    this.changeLabels(this.language ? 'en' : 'hn');
   }
   changeLabels(language: string): void {
     if (language == 'en') {
@@ -399,7 +410,7 @@ export class JobApplicationComponent {
         labelBankStatement: "Upload Bank Statement / Passbook",
         labelQualification: "Qualification",
         labelPan: "Pan Card",
-        labelAdhar: "Aadhar Card",
+        labelAdhar: "Aadhar Card (upload front and back side)",
         labelMRID: "MRID",
         labelPrevious: "Previous",
         labelSubmit: "Submit",
@@ -440,7 +451,7 @@ export class JobApplicationComponent {
         labelBankStatement: "बैंक स्टेटमेंट/पासबुक अपलोड करें",
         labelQualification: "योग्यता",
         labelPan: "पैन कार्ड",
-        labelAdhar: "आधार कार्ड",
+        labelAdhar: "आधार कार्ड (सामने और पीछे का हिस्सा अपलोड करें)",
         labelMRID: "MRID",
         labelPrevious: "पिछला",
         labelSubmit: "जमा करें",

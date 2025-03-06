@@ -2,7 +2,7 @@
   <nav aria-label="breadcrumb" class="d-flex justify-content-between align-items-center breadcrumb-bar">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="/admin">{{groupname}}</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Sub Division List</li>
+      <li class="breadcrumb-item active" aria-current="page">Step List</li>
     </ol>
   </nav>
 
@@ -14,19 +14,19 @@
             <thead>
               <tr>
                 <th>#</th>
-                <th>Zone Name</th>
-                <th>Location</th>
+                <th>Step</th>
+                <th>Order No.</th>
                 <th>Status</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let item of paginatedSubDivisionList; let i = index">
+              <tr *ngFor="let item of paginatedStepList; let i = index">
                 <td>{{ (currentPage - 1) * itemsPerPage + i + 1 }}</td>
                 <td>{{item.name}}</td>
-                <td>{{item.revenueTown}}</td>
+                <td>{{item.orderNo}}</td>
                 <td>{{item.active==1?"Active":"Inactive"}}</td>
-                <td><a class="btn p-0 fs-4" [routerLink]="['/admin/add-sub-division', item.id, item.groupDivisionId]"><i class="entypo entypo-pencil"></i></a></td>
+                <td><a class="btn p-0 fs-4" routerLink="/admin/add-step-master/{{item.stepId}}"><i class="entypo entypo-pencil"></i></a></td>
               </tr>
             </tbody>
           </table>
@@ -42,4 +42,3 @@
     </div>
   </div>
 </div>
-

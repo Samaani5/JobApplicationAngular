@@ -35,7 +35,7 @@
                      class="form-control"
                      formControlName="revenueTown"
                      placeholder="Enter Sub Division name"
-                     (input)="onSearch($event)"/>
+                     (input)="onSearch($event)" />
               <div *ngIf="SubDivisionForm.get('revenueTown')?.invalid && SubDivisionForm.get('revenueTown')?.touched" class="text-danger">
                 Sub Division is required.
               </div>
@@ -46,7 +46,7 @@
               </ul>
             </div>
           </div>
-       
+
 
           <!-- Active Field (Visible in Edit Mode) -->
           <div class="form-group" *ngIf="isEditMode">
@@ -56,6 +56,30 @@
                 <option [value]="1">Active</option>
                 <option [value]="0">Inactive</option>
               </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="name" class="col-sm-2 control-label label-large">MR Count</label>
+            <div class="col-sm-3">
+              <input id="mrCount"
+                     type="number"
+                     class="form-control"
+                     formControlName="mrCount"
+                     placeholder="Enter Meter Reader Count" />
+              <div *ngIf="SubDivisionForm.get('mrCount')?.errors?.['invalidCount'] && SubDivisionForm.get('mrCount')?.touched" class="text-danger">
+                {{ SubDivisionForm.get('mrCount')?.errors?.['invalidCount'] }}
+              </div>
+            </div>
+            <label for="name" class="col-sm-2 control-label label-large">SV Count</label>
+            <div class="col-sm-3">
+              <input id="svCount"
+                     type="number"
+                     class="form-control"
+                     formControlName="svCount"
+                     placeholder="Enter Supervisor Count" />
+              <div *ngIf="SubDivisionForm.get('svCount')?.errors?.['invalidCount'] && SubDivisionForm.get('svCount')?.touched" class="text-danger">
+                {{ SubDivisionForm.get('svCount')?.errors?.['invalidCount'] }}
+              </div>
             </div>
           </div>
           <div class="form-group">

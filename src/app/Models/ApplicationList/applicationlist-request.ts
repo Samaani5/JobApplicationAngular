@@ -3,6 +3,8 @@ export class ApplicationlistRequest {
   'name': string;
   'gender': string;
   'dateOfBirth': Date;
+  'appliedOn': Date;
+  'createdDate': Date;
   'age': string;
   'emailAddress': string;
   'mobileNo': string;
@@ -37,7 +39,6 @@ export class ApplicationlistRequest {
   'zoneId': number;
   'revenueId': number;
   'groupDivisionId': number;
-
 }
 export class Applicationlist {
   'type': string="";
@@ -68,10 +69,12 @@ export class Applicationlist {
   'revenueId': number = 0;
   'payRollDestId': number = 0;
   'employmentType': string = "";
+  'dateofbirth': string = "";
 }
 export class EmployeeDetail {
   'applicantId': number;
   'name': string;
+  'mobileno': string;
   'groupDivisionId': number;
 }
 
