@@ -4,6 +4,7 @@ export class AddVacancy {
   'location': string;
   'projectName': string;
   'locationIds': number[];
+  'stepIds': number[];
   'experienceFrom': number;
   'experienceTo': number;
   'qualification': string;

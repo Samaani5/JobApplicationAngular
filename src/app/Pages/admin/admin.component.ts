@@ -3,6 +3,7 @@ import { Component, Renderer2 } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink, RouterLinkActive, RouterModule, RouterOutlet } from '@angular/router';
 import { AdminfooterComponent } from '../../include/adminfooter/adminfooter.component';
 import { AdminheaderComponent } from '../../include/adminheader/adminheader.component';
+import { UserSession } from '../../Models/UserSession/user-session';
 import { AuthenticationService } from '../../Services/authentication/authentication.service';
 
 @Component({
@@ -16,10 +17,12 @@ export class AdminComponent {
   isadminPage = false;
   isContentLoaded = false;
   isSidebarCollapsed = false;
+  usession = new UserSession;
+  selectedImage: string | ArrayBuffer | null = '';
+  Role = '';
   constructor(private renderer: Renderer2, private route: ActivatedRoute, private router: Router, private _auth: AuthenticationService) { }
   ngOnInit(): void {
     this.isadminPage = this.route.snapshot.routeConfig?.path === 'admin';
-
     if (this.isadminPage) {
       this.loadExternalResources();
       setTimeout(() => {
@@ -29,6 +32,11 @@ export class AdminComponent {
     this._auth.getSidebarState().subscribe(state => {
       this.isSidebarCollapsed = state;
     });
+    this.usession = JSON.parse((sessionStorage.getItem('session') || '{}'));
+    this.Role = this.usession.roleId == 1 ? 'ADMIN' : (this.usession.roleId == 2 ? 'VERIFIER' : (this.usession.roleId == 3 ? 'EDITOR' : 'VIEWER'))
+    if (this.usession.userPhoto) {
+      this.selectedImage = this.usession.userPhoto;
+    }
   }
 
   loadExternalResources() {

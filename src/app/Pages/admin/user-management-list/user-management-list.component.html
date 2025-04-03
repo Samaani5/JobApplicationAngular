@@ -1,9 +1,10 @@
 <div class="mt-4">
   <nav aria-label="breadcrumb" class="d-flex justify-content-between align-items-center breadcrumb-bar">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="/admin">{{groupname}}</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Step List</li>
+      <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+      <li class="breadcrumb-item active" aria-current="page">User List</li>
     </ol>
+    <button *ngIf="hasAccess([1, 2])" class="btn btn-primary ms-2" [routerLink]="'/admin/user-management'">Add User</button>
   </nav>
 
   <div class="form-container">
@@ -14,19 +15,25 @@
             <thead>
               <tr>
                 <th>#</th>
-                <th>Step</th>
-                <th>Order No.</th>
+                <th>Name</th>
+                <th>Email Address</th>
+                <th>Role</th>
                 <th>Status</th>
+                <th>Created Date</th>
+                <th>Created By</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let item of paginatedStepList; let i = index">
+              <tr *ngFor="let item of paginatedgroupUserList; let i = index">
                 <td>{{ (currentPage - 1) * itemsPerPage + i + 1 }}</td>
                 <td>{{item.name}}</td>
-                <td>{{item.orderNo}}</td>
-                <td>{{item.active==1?"Active":"Inactive"}}</td>
-                <td><a class="btn p-0 fs-4" routerLink="/admin/add-step-master/{{item.stepId}}" *ngIf="hasAccess([1, 2, 3])"><i class="entypo entypo-pencil"></i></a></td>
+                <td>{{item.emailAddress}}</td>
+                <td>{{item.roleName}}</td>
+                <td>{{item.status}}</td>
+                <td>{{item.createdDate | date:'dd/MM/yyyy'}}<br /><span style="color: gray; font-size: x-small;">{{item.createdDate | date:'HH:mm'}}</span></td>
+                <td>{{item.createdBy}}</td>
+                <td><a class="btn p-0 fs-4" routerLink="/admin/user-management/{{item.userId}}" *ngIf="hasAccess([1])"><i class="entypo entypo-pencil"></i></a></td>
               </tr>
             </tbody>
           </table>

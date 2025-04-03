@@ -1,42 +1,38 @@
-import { CommonModule, NgFor, NgIf } from '@angular/common';
+import { CommonModule, DatePipe, NgFor, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink, RouterModule } from '@angular/router';
-import { AdminComponent } from '../admin.component';
-import { FormBuilder, FormsModule } from '@angular/forms';
 import { PaginationComponent } from '../../../include/pagination/pagination.component';
-import { JobApplyService } from '../../../Services/JobApply/job-apply.service';
-import { GroupDivisionList } from '../../../Models/JobPosting/job-posting';
+import { UserList } from '../../../Models/user/user';
 import { AuthenticationService } from '../../../Services/authentication/authentication.service';
-
+import { UserService } from '../../../Services/user/user.service';
+import { AdminComponent } from '../admin.component';
 declare var Swal: any;
-
 @Component({
-  selector: 'app-group-division-list',
+  selector: 'app-user-management-list',
   standalone: true,
-  imports: [NgFor, CommonModule, NgIf, RouterModule, RouterLink, AdminComponent, FormsModule, PaginationComponent],
-  templateUrl: './group-division-list.component.html',
-  styleUrl: './group-division-list.component.css'
+  imports: [NgFor, CommonModule, NgIf, RouterModule, RouterLink, AdminComponent, FormsModule, PaginationComponent, DatePipe],
+  templateUrl: './user-management-list.component.html',
+  styleUrl: './user-management-list.component.css'
 })
-export class GroupDivisionListComponent {
-  groupname: string = 'Masters';
-  allGroupDivisionList: any;
-  allDivisionList: GroupDivisionList[] = [];
-  paginatedgroupDivisionList: GroupDivisionList[] = []
+export class UserManagementListComponent {
   currentPage: number = 1;
   itemsPerPage: number = 10;
   totalItems: number = 0;
   totalPages: number = 0;
+  allUsersList: any;
+  paginatedgroupUserList: UserList[] = [];
 
-  constructor(private fb: FormBuilder, private jobapplyservice: JobApplyService, private router: Router, private _auth: AuthenticationService) {
-    this.GetAllGroupdivisions();
+  constructor(private fb: FormBuilder, private userService: UserService, private router: Router, private _auth: AuthenticationService) {
+    this.GetAllUsers();
   }
 
-  GetAllGroupdivisions() {
-    this.jobapplyservice.GetAllGroupdivisions().subscribe(
+  GetAllUsers() {
+    this.userService.getUsers().subscribe(
       (result: any) => {
         if (result.status == 200) {
-          this.allGroupDivisionList = result.body;
-          this.totalItems = this.allGroupDivisionList.length;
+          this.allUsersList = result.body;
+          this.totalItems = this.allUsersList.length;
           this.calculateTotalPages();
           this.updatePagination();
         }
@@ -48,6 +44,7 @@ export class GroupDivisionListComponent {
         });
       });
   }
+
   calculateTotalPages() {
     this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
   }
@@ -55,7 +52,7 @@ export class GroupDivisionListComponent {
   updatePagination() {
     const startIndex = (this.currentPage - 1) * Number(this.itemsPerPage);
     const endIndex = startIndex + Number(this.itemsPerPage);
-    this.paginatedgroupDivisionList = this.allGroupDivisionList.slice(startIndex, endIndex);
+    this.paginatedgroupUserList = this.allUsersList.slice(startIndex, endIndex);
   }
 
   onPageChange(newPage: number) {

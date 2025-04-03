@@ -88,24 +88,24 @@
               </select>
             </div>
           </div>
-          <!-- <div class="form-group">
-    <label for="field-2" class="col-sm-3 control-label">Disabled</label>
-    <div class="col-sm-5">
-      <input type="text" class="form-control" id="field-2" placeholder="Placeholder" disabled="">
-    </div>
-  </div> -->
-          <!-- <div class="form-group">
-    <label for="field-3" class="col-sm-3 control-label">Password</label>
-    <div class="col-sm-5">
-      <input type="password" class="form-control" id="field-3" placeholder="Placeholder (Password)">
-    </div>
-  </div> -->
-          <!-- <div class="form-group">
-    <label for="field-1" class="col-sm-3 control-label">File Field</label>
-    <div class="col-sm-5">
-      <input type="file" class="form-control" id="field-file" placeholder="Placeholder">
-    </div>
-  </div> -->
+          <div class="form-group">
+            <label class="col-sm-2 control-label label-large">Step</label>
+            <div class="col-sm-8">
+              <div class="row">
+                <div formArrayName="steps">
+                  <div *ngFor="let step of allStepList; let i = index" class="checkbox col-sm-3">
+                    <div [formGroupName]="i">
+                      <label for="step-{{ i }}">
+                        <input type="checkbox" formControlName="isChecked" id="step-{{ i }}" />
+                        {{ step.name }}
+                      </label>
+                    </div>
+                  </div>
+                  <div *ngIf="stepsFormArray.invalid && stepsFormArray.touched" class="text-danger">Please select at least one step.</div>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="form-group">
             <label for="field-ta" class="col-sm-2 control-label label-large">Job Description</label>
             <div class="col-sm-8">
@@ -162,57 +162,6 @@
               </div>
             </div>
           </div>
-          <!-- <div class="form-group">
-    <label for="field-ta" class="col-sm-3 control-label">Autogrow</label>
-    <div class="col-sm-5">
-      <textarea class="form-control autogrow" id="field-ta" placeholder="I will grow as you type new lines." style="overflow: hidden; overflow-wrap: break-word; resize: horizontal; height: 48px;"></textarea>
-    </div>
-  </div> -->
-          <!-- <div class="form-group has-error">
-    <label for="field-4" class="col-sm-3 control-label">Error field</label>
-    <div class="col-sm-5">
-      <input type="text" class="form-control" id="field-4" placeholder="Placeholder">
-    </div>
-  </div> -->
-          <!-- <div class="form-group has-warning">
-    <label for="field-5" class="col-sm-3 control-label">Warning field</label>
-    <div class="col-sm-5">
-      <input type="text" class="form-control" id="field-5" placeholder="Placeholder">
-    </div>
-  </div> -->
-          <!-- <div class="form-group has-success">
-    <label for="field-6" class="col-sm-3 control-label">Success field</label>
-    <div class="col-sm-5">
-      <input type="text" class="form-control" id="field-6" placeholder="Placeholder">
-    </div>
-  </div> -->
-          <!-- <div class="form-group">
-    <div class="col-sm-offset-3 col-sm-5">
-      <div class="checkbox">
-        <label>
-          <input type="checkbox">Checkbox 1
-        </label>
-      </div> <div class="checkbox">
-        <label>
-          <input type="checkbox">Checkbox 2
-        </label>
-      </div>
-    </div>
-  </div> -->
-          <!-- <div class="form-group">
-    <div class="col-sm-offset-3 col-sm-5">
-      <div class="radio">
-        <label>
-          <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked="">Radio Input 1
-        </label>
-      </div> <div class="radio">
-        <label>
-          <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">Radio Input 2
-        </label>
-      </div>
-    </div>
-  </div>  -->
-
           <div class="form-group">
             <div class="col-sm-offset-5 col-sm-5">
               <button type="submit" class="btn btn-default label-large" [disabled]="vacancyForm.invalid">Submit</button>

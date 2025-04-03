@@ -1,0 +1,111 @@
+<hr />
+<div class="header">
+  <h2>User Management</h2>
+</div>
+<br />
+<div class="row justify-content-center">
+  <div class="col-md-10">
+    <div class="panel panel-primary" data-collapsed="0">
+      <div class="panel-body">
+        <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="form-horizontal form-groups-bordered">
+          <input type="hidden" formControlName="userId">
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label label-large">Divisions</label>
+            <div class="col-sm-8">
+              <div class="row" formArrayName="divisions">
+                <div *ngFor="let division of GroupDivisionList; let i = index" class="checkbox col-sm-3">
+                  <div [formGroupName]="i">
+                    <label for="division-{{ i }}">
+                      <input type="checkbox" formControlName="isChecked" id="division-{{ i }}" />
+                      {{ division.name }}
+                    </label>
+                  </div>
+                </div>
+                <div *ngIf="divisionsFormArray.invalid && divisionsFormArray.touched" class="text-danger">Please select at least one division.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group" *ngIf="LocationList.length>0">
+            <label class="col-sm-2 control-label label-large">Zones</label>
+            <div class="col-sm-8">
+              <div class="row" formArrayName="zones">
+                <div *ngFor="let zone of LocationList; let i = index" class="checkbox col-sm-3">
+                  <div [formGroupName]="i">
+                    <label for="zone-{{ i }}">
+                      <input type="checkbox" formControlName="isChecked" id="zone-{{ i }}" (change)="onZoneCheckboxChange(i, $event)" />
+                      {{ zone.location }}
+                    </label>
+                  </div>
+                </div>
+                <div *ngIf="zonesFormArray.invalid && zonesFormArray.touched" class="text-danger">Please select at least one zone.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="name" class="col-sm-2 control-label label-large">Name</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" id="name" placeholder="Name" formControlName="name">
+              <div *ngIf="userForm.get('name')?.invalid && userForm.get('name')?.touched" class="text-danger">
+                Enter a valid name.
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email" class="col-sm-2 control-label label-large">Email</label>
+            <div class="col-sm-8">
+              <input type="email" class="form-control" id="email" placeholder="Email" formControlName="email">
+              <div *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched" class="text-danger">
+                Enter a valid email.
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="field-1" class="col-sm-2 control-label label-large">Role</label>
+            <div class="col-sm-8">
+              <select class="form-control" formControlName="role">
+                <option value="" selected disabled>Select Role</option>
+                <option *ngFor="let item of RoleList" [value]="item.roleId">{{ item.roleName }}</option>
+              </select>
+              <div *ngIf="userForm.get('role')?.invalid && userForm.get('role')?.touched" class="text-danger">
+                Select a role.
+              </div>
+            </div>
+          </div>
+          <div class="form-group" *ngIf="isEditMode">
+            <label for="status" class="col-sm-2 control-label label-large">Active</label>
+            <div class="col-sm-8">
+              <select id="status" class="form-control" formControlName="status">
+                <option [value]="1">Active</option>
+                <option [value]="0">Inactive</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="userPhoto" class="col-sm-2 control-label label-large">Upload Photo:</label>
+            <div class="col-sm-8">
+              <input type="file" class="form-control" id="userPhoto" placeholder="User Photo" (change)="onFileChange($event)">
+            </div>
+          </div>
+
+
+          <div class="form-group" *ngIf="selectedImage">
+            <label for="userPhoto" class="col-sm-2 control-label label-large">Preview:</label>
+            <div class="col-sm-8">
+              <img [src]="selectedImage" alt="User Photo" width="150">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-sm-offset-5 col-sm-5">
+              <button type="submit" class="btn btn-default label-large" [disabled]="userForm.invalid">Submit</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

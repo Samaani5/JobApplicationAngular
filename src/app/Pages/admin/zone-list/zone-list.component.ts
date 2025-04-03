@@ -6,6 +6,7 @@ import { FormBuilder, FormsModule } from '@angular/forms';
 import { PaginationComponent } from '../../../include/pagination/pagination.component';
 import { JobApplyService } from '../../../Services/JobApply/job-apply.service';
 import { LocationList } from '../../../Models/JobPosting/job-posting';
+import { AuthenticationService } from '../../../Services/authentication/authentication.service';
 declare var Swal: any;
 
 @Component({
@@ -25,7 +26,7 @@ export class ZoneListComponent {
   totalItems: number = 0;
   totalPages: number = 0;
 
-constructor(private fb: FormBuilder, private jobapplyservice: JobApplyService, private router: Router) {
+  constructor(private fb: FormBuilder, private jobapplyservice: JobApplyService, private router: Router, private _auth: AuthenticationService) {
     this.GetAllLocations();
   }
 
@@ -67,5 +68,8 @@ constructor(private fb: FormBuilder, private jobapplyservice: JobApplyService, p
     this.currentPage = 1;
     this.calculateTotalPages();
     this.updatePagination();
+  }
+  hasAccess(allowedRoles: number[]): boolean {
+    return this._auth.hasAccess(allowedRoles);
   }
 }

@@ -32,6 +32,7 @@ export class AddVacanciesComponent {
   selectedStateId = 0;
   jobreq = new PostedJobListReq;
   private debounceTimer: any;
+    allStepList: any;
 
   constructor(private fb: FormBuilder, private jobapplyservice: JobApplyService, private applicantservice: ApplicantListService, private route: ActivatedRoute, private router: Router) {
     this.usession = JSON.parse((sessionStorage.getItem('session') || '{}'));
@@ -53,8 +54,10 @@ export class AddVacanciesComponent {
       fromDate: ['', Validators.required],
       toDate: ['', Validators.required],
       statusId: [],
+      steps: this.fb.array([]),
     });
     this.GetGroupdivisions();
+    this.GetAllSteps();
   }
   formatDate(date: string): string {
     if (!date) {
@@ -94,7 +97,9 @@ export class AddVacanciesComponent {
         const eventMock = { target: { value: vacancyData.groupDivisionId } };
         this.onDivisionChange(eventMock);
         const vacancyLocations = result.body.vacancyLocations.map((loc: any) => loc.locationId);
+        const vacancySteps = result.body.vacancySteps.map((step: any) => step.stepId);
         this.GetLocationWithDebounce(vacancyData.groupDivisionId, vacancyLocations);
+        this.GetAllSteps(vacancySteps);
       },
       (error: any) => {
         Swal.fire({
@@ -106,6 +111,9 @@ export class AddVacanciesComponent {
   }
   get locationsFormArray() {
     return this.vacancyForm.get('locations') as FormArray;
+  }
+  get stepsFormArray() {
+    return this.vacancyForm.get('steps') as FormArray;
   }
   ngAfterViewInit(): void {
     $('#datepicker').datepicker({
@@ -154,6 +162,9 @@ export class AddVacanciesComponent {
       const selectedLocations = this.locationsFormArray.controls
         .filter((control: any) => control.value.isChecked)
         .map((control: any) => control.value.id);
+      const selectedSteps = this.stepsFormArray.controls
+        .filter((control: any) => control.value.isChecked)
+        .map((control: any) => control.value.id);
       const selectedProject = this.ProjectList.find(x => x.projectId === Number(this.vacancyForm.value.projectId));
       this.addvacancymodel = {
         groupDivisionId: Number(this.vacancyForm.value.groupDivisionId),
@@ -161,10 +172,11 @@ export class AddVacanciesComponent {
         projectName: selectedProject?.projectName || '',
         location: "",
         locationIds: selectedLocations,
+        stepIds: selectedSteps,
         experienceFrom: this.vacancyForm.value.experienceFrom,
         experienceTo: this.vacancyForm.value.experienceTo,
         qualification: this.vacancyForm.value.qualification,
-        jobDescription: this.vacancyForm.value.jobDescription,
+        jobDescription: this.vacancyForm.value.jobDescription?.trim(),
         keySkills: this.vacancyForm.value.keySkills,
         fromDate: this.vacancyForm.value.fromDate,
         toDate: this.vacancyForm.value.toDate,
@@ -304,5 +316,31 @@ export class AddVacanciesComponent {
     this.GetDesignation(this.selectedStateId);
     this.GetLocationWithDebounce(this.selectedStateId);
     this.GetProject(this.selectedStateId);
+  }
+  GetAllSteps(selectedStepIds: number[] = []) {
+    this.jobapplyservice.GetAllSteps().subscribe(
+      (result: any) => {
+        if (result.status == 200) {
+          this.allStepList = result.body;
+          this.allStepList = this.allStepList.filter((step: any) => step.active == 1 || selectedStepIds.includes(step.stepId));
+          const stepsArray = this.stepsFormArray;
+          stepsArray.clear();
+
+          this.allStepList.forEach((location: { stepId: any; }) => {
+            stepsArray.push(
+              this.fb.group({
+                id: [location.stepId],
+                isChecked: [selectedStepIds.includes(location.stepId)],
+              })
+            );
+          });
+        }
+      },
+      (error: any) => {
+        Swal.fire({
+          text: error.message,
+          icon: "error"
+        });
+      });
   }
 }

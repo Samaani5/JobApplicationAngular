@@ -11,6 +11,7 @@ import { Bank, Company, DesignationItem, District, EmpStatus, LocationItem, Proj
 import { PayrollDataRequest } from '../../../Models/Masters/add-group-division';
 import { UserSession } from '../../../Models/UserSession/user-session';
 import { ApplicantListService } from '../../../Services/ApplicantList/applicant-list.service';
+import { AuthenticationService } from '../../../Services/authentication/authentication.service';
 import { JobApplicationService } from '../../../Services/JobApplication/job-application.service';
 import { JobApplyService } from '../../../Services/JobApply/job-apply.service';
 import { AdminComponent } from '../admin.component';
@@ -99,7 +100,7 @@ export class ApplicantListComponent {
   isProcessing: boolean = false;
 
   constructor(private router: Router, private jobapplyservice: JobApplyService, private route: ActivatedRoute, private jobappservice: JobApplicationService,
-    private applicantservice: ApplicantListService, private sanitizer: DomSanitizer, private fb: FormBuilder) {
+    private applicantservice: ApplicantListService, private sanitizer: DomSanitizer, private fb: FormBuilder, private _auth: AuthenticationService) {
     this.editEmployeeForm = this.fb.group({
       bankId: [0, Validators.required],
       designationId: [0, Validators.required],
@@ -151,7 +152,15 @@ export class ApplicantListComponent {
     this.jobapplyservice.GetGroupdivisions().subscribe(
       (result: any) => {
         if (result.status == 200) {
-          this.GroupDivisionList = result.body;
+          let allGroupDivisions = result.body;
+          const userGroupDivisions: number[] = this.usession.userGroupDivisions || [];
+          if (this.usession.roleId !== 1) {
+            this.GroupDivisionList = allGroupDivisions.filter((group: any) =>
+              userGroupDivisions.includes(group.divisionId)
+            );
+          } else {
+            this.GroupDivisionList = allGroupDivisions;
+          }
         }
       },
       (error: any) => {
@@ -197,7 +206,15 @@ export class ApplicantListComponent {
   GetLocation(groupId: number) {
     this.jobapplyservice.GetLocation(groupId).subscribe(
       (result: any) => {
-        this.LocationList = result;
+        let allLocations = result;
+        const userZones: number[] = this.usession.userZones || [];
+        if (this.usession.roleId !== 1) {
+          this.LocationList = allLocations.filter((group: any) =>
+            userZones.includes(group.locationId)
+          );
+        } else {
+          this.LocationList = allLocations;
+        }
       },
       (error: any) => {
         Swal.fire({
@@ -250,6 +267,7 @@ export class ApplicantListComponent {
     this.applicantReq.groupDivisionId = this.formData.groupDivision;
     this.applicantReq.statusId = this.statusid;
     this.applicantReq.type = this.type;
+    this.applicantReq.userId = this.usession.userId;
     this.applicantservice.GetDataDashboardLinked(this.applicantReq).subscribe(
       (result: any) => {
         if (result.status == 200) {
@@ -281,6 +299,7 @@ export class ApplicantListComponent {
     this.applicantReq.expFrom = Number(this.formData.experienceFrom);
     this.applicantReq.expTo = Number(this.formData.experienceTo);
     this.applicantReq.keySkills = this.formData.keyskill;
+    this.applicantReq.userId = this.usession.userId;
     this.applicantservice.GetSearchDataPhotoSmart(this.applicantReq).subscribe(
       (result: any) => {
         if (result.status == 200) {
@@ -301,6 +320,7 @@ export class ApplicantListComponent {
     this.sortColumn = 'appliedOn';
     this.formData.applicantId = 0;
     this.formData.searchQuery = '';
+    this.currentPage = 1;
     this.GetSearchDataPhotoSmart();
     this.groupid = Number(this.formData.groupDivision)
   }
@@ -644,6 +664,7 @@ export class ApplicantListComponent {
         model.mobileno = "";
       }
       model.groupDivisionId = Number(this.formData.groupDivision);
+      model.userId = this.usession.userId;
       this.applicantservice.SearchByName(model).subscribe(
         (result: any) => {
           if (result.status == 200) {
@@ -905,5 +926,8 @@ export class ApplicantListComponent {
     const month = ('0' + (d.getMonth() + 1)).slice(-2);
     const year = d.getFullYear();
     return `${day}/${month}/${year}`;
+  }
+  hasAccess(allowedRoles: number[]): boolean {
+    return this._auth.hasAccess(allowedRoles);
   }
 }

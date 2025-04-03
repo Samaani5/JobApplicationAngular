@@ -100,6 +100,7 @@ export class DesignationItem {
 export class LocationItem {
   'locationId': number;
   'location': string;
+  'divisionIds': number[];
 }
 export class ProjectItem {
   'projectId': number;

@@ -6,6 +6,7 @@ import { FormBuilder, FormsModule } from '@angular/forms';
 import { PaginationComponent } from '../../../include/pagination/pagination.component';
 import { JobApplyService } from '../../../Services/JobApply/job-apply.service';
 import { ProjectList } from '../../../Models/JobPosting/job-posting';
+import { AuthenticationService } from '../../../Services/authentication/authentication.service';
 
 declare var Swal: any;
 @Component({
@@ -25,47 +26,50 @@ export class ProjectListComponent {
   ProjectList: ProjectList[] = [];
   paginatedgroupProjectList: ProjectList[] = [];
 
-  constructor(private fb: FormBuilder, private jobapplyservice: JobApplyService, private router: Router) {
+  constructor(private fb: FormBuilder, private jobapplyservice: JobApplyService, private router: Router, private _auth: AuthenticationService) {
     this.GetAllProjects();
-  } 
+  }
 
   GetAllProjects() {
-      this.jobapplyservice.GetAllProjects().subscribe(
-        (result: any) => {
-          if (result.status == 200) {
-            this.allProjectList = result.body;
-            this.totalItems = this.allProjectList.length;
-            this.calculateTotalPages();
-            this.updatePagination();
-          }
-        },
-        (error: any) => {
-          Swal.fire({
-            text: error.message,
-            icon: "error"
-          });
+    this.jobapplyservice.GetAllProjects().subscribe(
+      (result: any) => {
+        if (result.status == 200) {
+          this.allProjectList = result.body;
+          this.totalItems = this.allProjectList.length;
+          this.calculateTotalPages();
+          this.updatePagination();
+        }
+      },
+      (error: any) => {
+        Swal.fire({
+          text: error.message,
+          icon: "error"
         });
-    }
-  
-    calculateTotalPages() {
-      this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
-    }
-  
-    updatePagination() {
-      const startIndex = (this.currentPage - 1) * Number(this.itemsPerPage);
-      const endIndex = startIndex + Number(this.itemsPerPage);
-      this.paginatedgroupProjectList = this.allProjectList.slice(startIndex, endIndex);
-    }
-  
-    onPageChange(newPage: number) {
-      this.currentPage = newPage;
-      this.updatePagination();
-    }
-  
-    onPagesizeChange(newPageSize: number) {
-      this.itemsPerPage = newPageSize;
-      this.currentPage = 1;
-      this.calculateTotalPages();
-      this.updatePagination();
-    }
+      });
+  }
+
+  calculateTotalPages() {
+    this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
+  }
+
+  updatePagination() {
+    const startIndex = (this.currentPage - 1) * Number(this.itemsPerPage);
+    const endIndex = startIndex + Number(this.itemsPerPage);
+    this.paginatedgroupProjectList = this.allProjectList.slice(startIndex, endIndex);
+  }
+
+  onPageChange(newPage: number) {
+    this.currentPage = newPage;
+    this.updatePagination();
+  }
+
+  onPagesizeChange(newPageSize: number) {
+    this.itemsPerPage = newPageSize;
+    this.currentPage = 1;
+    this.calculateTotalPages();
+    this.updatePagination();
+  }
+  hasAccess(allowedRoles: number[]): boolean {
+    return this._auth.hasAccess(allowedRoles);
+  }
 }

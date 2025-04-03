@@ -4,6 +4,7 @@ import { FormBuilder, FormsModule } from '@angular/forms';
 import { Router, RouterLink, RouterModule } from '@angular/router';
 import { PaginationComponent } from '../../../include/pagination/pagination.component';
 import { SubDivisionList } from '../../../Models/JobPosting/job-posting';
+import { AuthenticationService } from '../../../Services/authentication/authentication.service';
 import { JobApplyService } from '../../../Services/JobApply/job-apply.service';
 import { AdminComponent } from '../admin.component';
 declare var Swal: any;
@@ -24,7 +25,7 @@ export class SubDivisionListComponent {
   SubDivisionList: SubDivisionList[] = [];
   paginatedSubDivisionList: SubDivisionList[] = [];
 
-  constructor(private fb: FormBuilder, private jobapplyservice: JobApplyService, private router: Router) {
+  constructor(private fb: FormBuilder, private jobapplyservice: JobApplyService, private router: Router, private _auth: AuthenticationService) {
     this.GetAllSubDivision();
   }
 
@@ -67,5 +68,7 @@ export class SubDivisionListComponent {
     this.calculateTotalPages();
     this.updatePagination();
   }
-
+  hasAccess(allowedRoles: number[]): boolean {
+    return this._auth.hasAccess(allowedRoles);
+  }
 }

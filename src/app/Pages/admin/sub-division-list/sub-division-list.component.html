@@ -26,7 +26,7 @@
                 <td>{{item.name}}</td>
                 <td>{{item.revenueTown}}</td>
                 <td>{{item.active==1?"Active":"Inactive"}}</td>
-                <td><a class="btn p-0 fs-4" [routerLink]="['/admin/add-sub-division', item.id, item.groupDivisionId]"><i class="entypo entypo-pencil"></i></a></td>
+                <td><a class="btn p-0 fs-4" [routerLink]="['/admin/add-sub-division', item.id, item.groupDivisionId]" *ngIf="hasAccess([1, 2, 3])"><i class="entypo entypo-pencil"></i></a></td>
               </tr>
             </tbody>
           </table>

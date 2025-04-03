@@ -13,11 +13,11 @@
               <li class="profile-info dropdown">
                 <!-- add class "pull-right" if you want to place this from right -->
                 <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">
-                  <img src="assets/images/user.png"
+                  <img [src]="selectedImage"
                        alt=""
                        class="img-circle"
                        width="44">
-                  ADMIN
+                  {{Role}}
                 </a>
                 <ul class="dropdown-menu">
                   <!-- Reverse Caret -->

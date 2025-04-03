@@ -265,27 +265,40 @@
                   {{item.statusName}}
                 </td>
                 <td class="text-nowrap">
-                  <a title="Verify" *ngIf="item.statusName === 'Applied' && (item.groupDivisionId === 4 || item.groupDivisionId === 3)" class="btn p-0 fs-4" (click)="showEditModel(item.applicantId)">
-                    <!--<i class="entypo entypo-pencil"></i>-->
+                  <!-- Verify button (Editor role - 3) -->
+                  <a title="Verify"
+                     *ngIf="item.statusName === 'Applied' && (item.groupDivisionId === 4 || item.groupDivisionId === 3) && hasAccess([1, 3])"
+                     class="btn p-0 fs-4"
+                     (click)="showEditModel(item.applicantId)">
                     <i class="entypo entypo-check"></i>
                   </a>
+
                   <span class="font-bold fs-4" *ngIf="item.statusName === 'Applied' && (item.groupDivisionId === 4 || item.groupDivisionId === 3)">|</span>
+
+                  <!-- View details for all users -->
                   <ng-container *ngIf="item.groupDivisionId === 1; else defaultTemplate1">
                     <a title="View" (click)="showDetail(item.mobileNo)" class="btn p-0 fs-4">
                       <i class="entypo entypo-eye"></i>
                     </a>
                   </ng-container>
+
                   <ng-template #defaultTemplate1>
                     <a title="View" (click)="showDetailOther(item.applicantId)" class="btn p-0 fs-4">
                       <i class="entypo entypo-eye"></i>
                     </a>
                   </ng-template>
-                  <span class="font-bold fs-4" *ngIf="item.statusName === 'Applied' && (item.groupDivisionId === 4 || item.groupDivisionId === 3)">|</span>
-                  <a title="Hire" *ngIf="item.statusName === 'Applied' && (item.groupDivisionId === 4 || item.groupDivisionId === 3)" class="btn p-0 fs-4" (click)="showVerifyModel(item.applicantId)">
-                    <!--<i class="entypo entypo-check"></i>-->
+
+                  <span class="font-bold fs-4" *ngIf="item.statusName === 'Applied' && (item.groupDivisionId === 4 || item.groupDivisionId === 3) && hasAccess([1, 2])">|</span>
+
+                  <!-- Hire button (Verifier role - 2) -->
+                  <a title="Hire"
+                     *ngIf="item.statusName === 'Applied' && (item.groupDivisionId === 4 || item.groupDivisionId === 3) && hasAccess([1, 2])"
+                     class="btn p-0 fs-4"
+                     (click)="showVerifyModel(item.applicantId)">
                     <span class="material-symbols-outlined ps-1" style="font-size:19px;">person_check</span>
                   </a>
                 </td>
+
               </tr>
             </tbody>
           </table>
@@ -680,10 +693,10 @@
                     <label class="form-label">Resume File</label>
                     <div class="bg-white text-center">
                       <!--<embed [src]="getSafeResumeUrl(employeeData.resumeFilePath)"
-                             type="application/pdf"
-                             width="100%"
-                             height="400px" />-->
-                      <div *ngIf="safeResumeUrl">
+         type="application/pdf"
+         width="100%"
+         height="400px" />-->
+                      <div *ngIf="safeResumeUrl && safeResumeUrl !== 'null' && safeResumeUrl !== ''">
                         <iframe [src]="safeResumeUrl" width="100%" height="500px"></iframe>
                       </div>
                     </div>

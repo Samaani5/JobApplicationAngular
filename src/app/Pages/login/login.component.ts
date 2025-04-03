@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Login } from '../../models/Login/login';
 import { UserSession } from '../../Models/UserSession/user-session';
 import { AuthenticationService } from '../../Services/authentication/authentication.service';
+import { UserService } from '../../Services/user/user.service';
 declare var Swal: any;
 @Component({
   selector: 'app-login',
@@ -21,7 +22,7 @@ export class LoginComponent {
   message = "";
 
   constructor(private renderer: Renderer2, private route: ActivatedRoute, private router: Router, @Inject(PLATFORM_ID) private platformId: Object,
-    private _auth: AuthenticationService) {
+    private _auth: AuthenticationService, private userService: UserService) {
     if (isPlatformBrowser(this.platformId)) {
       window.localStorage.clear();
       window.sessionStorage.clear();
@@ -34,6 +35,12 @@ export class LoginComponent {
       Token: '',
       TokenExpireTime: '',
       status: '',
+      userId: 0,
+      roleId: 0,
+      name: '',
+      userPhoto: '',
+      userGroupDivisions: [],
+      userZones:[],
     };
   }
 
@@ -77,8 +84,8 @@ export class LoginComponent {
           }
           this.usession = result.body[0];
           localStorage.removeItem('login');
-          sessionStorage.setItem('session', JSON.stringify(this.usession));
-          this.router.navigate(['/admin']);
+          //sessionStorage.setItem('session', JSON.stringify(this.usession));
+          this.GetUserById(this.usession.userId);
         }
       },
       (error: any) => {
@@ -107,5 +114,29 @@ export class LoginComponent {
     const script = this.renderer.createElement('script');
     this.renderer.setAttribute(script, 'src', src);
     this.renderer.appendChild(document.head, script);
+  }
+
+  GetUserById(Id: number) {
+    this.userService.getUserById(Id).subscribe(
+      (result: any) => {
+        if (result.status == 200) {
+          const users = result.body.users[0];
+          this.usession.name = users.name;
+          this.usession.roleId = users.roleId;
+          this.usession.userPhoto = users.userPhoto;
+          this.usession.userGroupDivisions = result.body.userGroupDivisions.map((loc: any) => loc.groupDivisionId);
+          this.usession.userZones = result.body.userZones.map((step: any) => step.zoneId);
+          sessionStorage.setItem('session', JSON.stringify(this.usession));
+          setTimeout(() => {
+            this.router.navigate(['/admin']);
+          }, 100);
+        }
+      },
+      (error: any) => {
+        Swal.fire({
+          text: error.message,
+          icon: "error"
+        });
+      });
   }
 }

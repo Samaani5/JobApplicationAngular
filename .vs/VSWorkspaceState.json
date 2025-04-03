@@ -3,11 +3,14 @@
     "",
     "\\src",
     "\\src\\app",
+    "\\src\\app\\include",
+    "\\src\\app\\include\\adminheader",
     "\\src\\app\\Pages",
     "\\src\\app\\Pages\\admin",
-    "\\src\\app\\Pages\\admin\\applicant-list",
-    "\\src\\environments"
+    "\\src\\app\\Pages\\login",
+    "\\src\\app\\Services",
+    "\\src\\app\\Services\\authentication"
   ],
-  "SelectedNode": "\\src\\app\\Pages\\admin\\applicant-list\\applicant-list.component.ts",
+  "SelectedNode": "\\src\\app\\Pages\\login\\login.component.ts",
   "PreviewInSolutionExplorer": false
 }

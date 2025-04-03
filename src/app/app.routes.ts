@@ -29,6 +29,8 @@ import { SubDivisionListComponent } from './Pages/admin/sub-division-list/sub-di
 import { AddSubDivisionComponent } from './Pages/admin/add-sub-division/add-sub-division.component';
 import { StepMasterListComponent } from './Pages/admin/step-master-list/step-master-list.component';
 import { AddStepMasterComponent } from './Pages/admin/add-step-master/add-step-master.component';
+import { UserManagementComponent } from './Pages/admin/user-management/user-management.component';
+import { UserManagementListComponent } from './Pages/admin/user-management-list/user-management-list.component';
 
 export const routes: Routes = [
   {
@@ -71,6 +73,9 @@ export const routes: Routes = [
       { path: 'step-master-list', component: StepMasterListComponent, canActivate: [AuthGuardService] },
       { path: 'add-step-master', component: AddStepMasterComponent, canActivate: [AuthGuardService] },
       { path: 'add-step-master/:id', component: AddStepMasterComponent, canActivate: [AuthGuardService] },
+      { path: 'user-management', component: UserManagementComponent, canActivate: [AuthGuardService] },
+      { path: 'user-management/:id', component: UserManagementComponent, canActivate: [AuthGuardService] },
+      { path: 'user-management-list', component: UserManagementListComponent, canActivate: [AuthGuardService] },
     ]
   }
 ];

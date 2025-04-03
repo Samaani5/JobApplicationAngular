@@ -5,7 +5,7 @@
       <li class="breadcrumb-item"><a href="/admin">{{groupname}}</a></li>
       <li class="breadcrumb-item active" aria-current="page">Employee List</li>
     </ol>
-    <button class="btn btn-primary ms-2" [routerLink]="'/admin/add-vacancy'">Add Job</button>
+    <button *ngIf="hasAccess([1, 2])" class="btn btn-primary ms-2" [routerLink]="'/admin/add-vacancy'">Add Job</button>
   </nav>
 
 
@@ -86,7 +86,7 @@
                 <td>{{item.keySkills}}</td>
                 <td>{{item.todate | date:'dd/MM/yyyy'}}</td>
                 <td style="cursor:pointer">{{item.status}}</td>
-                <td><a class="btn p-0 fs-4" routerLink="/admin/add-vacancy/{{item.vacancyId}}"><i class="entypo entypo-pencil"></i></a></td>
+                <td><a class="btn p-0 fs-4" routerLink="/admin/add-vacancy/{{item.vacancyId}}" *ngIf="hasAccess([1, 2])"><i class="entypo entypo-pencil"></i></a></td>
               </tr>
             </tbody>
           </table>

@@ -70,11 +70,13 @@ export class Applicationlist {
   'payRollDestId': number = 0;
   'employmentType': string = "";
   'dateofbirth': string = "";
+  'userId': number = 0;
 }
 export class EmployeeDetail {
   'applicantId': number;
   'name': string;
   'mobileno': string;
   'groupDivisionId': number;
+  'userId': number;
 }
 

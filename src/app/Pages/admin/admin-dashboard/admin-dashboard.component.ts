@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AdminfooterComponent } from '../../../include/adminfooter/adminfooter.component';
 import { DashboardResponse } from '../../../Models/Dashboard/dashboard-response';
+import { UserSession } from '../../../Models/UserSession/user-session';
 import { AuthenticationService } from '../../../Services/authentication/authentication.service';
 import { DashboardService } from '../../../Services/Dashboard/dashboard.service';
 import { JobApplyService } from '../../../Services/JobApply/job-apply.service';
@@ -22,8 +23,10 @@ export class AdminDashboardComponent {
   dashboardDataMonth: DashboardResponse[] = [];
   groupedData!: { [key: string]: DashboardResponse[]; };
   groupedDataMonth!: { [key: string]: DashboardResponse[]; };
+  usession = new UserSession;
 
   constructor(private router: Router, private jobapplyservice: JobApplyService, private dashboardservice: DashboardService) {
+    this.usession = JSON.parse((sessionStorage.getItem('session') || '{}'));
     this.GetDashBoardData();
     this.GetDashBoardDataMonth();
   }
@@ -67,7 +70,7 @@ export class AdminDashboardComponent {
   }
   GetDashBoardData() {
     debugger;
-    this.dashboardservice.GetDashBoardData().subscribe(
+    this.dashboardservice.GetDashBoardData(this.usession.userId).subscribe(
       (result: any) => {
         if (result.status == 200) {
           this.dashboardData = result.body;
@@ -83,7 +86,7 @@ export class AdminDashboardComponent {
   }
   GetDashBoardDataMonth() {
     debugger;
-    this.dashboardservice.GetDashBoardDataMonth().subscribe(
+    this.dashboardservice.GetDashBoardDataMonth(this.usession.userId).subscribe(
       (result: any) => {
         if (result.status == 200) {
           this.dashboardDataMonth = result.body;

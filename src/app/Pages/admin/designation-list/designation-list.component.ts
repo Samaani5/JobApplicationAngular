@@ -6,6 +6,7 @@ import { FormBuilder, FormsModule } from '@angular/forms';
 import { PaginationComponent } from '../../../include/pagination/pagination.component';
 import { JobApplyService } from '../../../Services/JobApply/job-apply.service';
 import { DesignationList } from '../../../Models/JobPosting/job-posting';
+import { AuthenticationService } from '../../../Services/authentication/authentication.service';
 
 declare var Swal: any;
 
@@ -26,7 +27,7 @@ export class DesignationListComponent {
   DesignationList: DesignationList[] = [];
   paginatedgroupDesignationList: DesignationList[] = [];
 
-  constructor(private fb: FormBuilder, private jobapplyservice: JobApplyService, private router: Router) {
+  constructor(private fb: FormBuilder, private jobapplyservice: JobApplyService, private router: Router, private _auth: AuthenticationService) {
     this.GetAllDesignations();
   }
   
@@ -69,5 +70,7 @@ export class DesignationListComponent {
     this.calculateTotalPages();
     this.updatePagination();
   }
-
+  hasAccess(allowedRoles: number[]): boolean {
+    return this._auth.hasAccess(allowedRoles);
+  }
 }

@@ -23,76 +23,88 @@
   </header>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul id="main-menu" class="main-menu">
-      <li class="root-level">
+      <li class="root-level" *ngIf="hasAccess([1, 2, 3, 4])">
         <a href="/admin">
           <i class="entypo-gauge"></i>
           <span class="title">Dashboard</span>
         </a>
       </li>
-      <li class="root-level">
+      <li class="root-level" *ngIf="hasAccess([1, 2, 3, 4])">
+        <a href="/admin/user-management-list" onclick="sessionStorage.removeItem('groupParams')">
+          <i class="entypo-users"></i>
+          <span class="title">Users List</span>
+        </a>
+      </li>
+      <li class="root-level" *ngIf="hasAccess([1])">
+        <a href="/admin/user-management" onclick="sessionStorage.removeItem('groupParams')">
+          <i class="entypo-user-add"></i>
+          <span class="title">User Management</span>
+        </a>
+      </li>
+      <li class="root-level" *ngIf="hasAccess([1, 2, 3, 4])">
         <a href="/admin/applicant-list" onclick="sessionStorage.removeItem('groupParams')">
           <i class="entypo-layout"></i>
           <span class="title">Applicant List</span>
         </a>
       </li>
-      <li class="root-level">
+      <li class="root-level" *ngIf="hasAccess([1, 2, 3, 4])">
         <a href="/admin/post-vacancy-list">
           <i class="entypo-list"></i>
           <span class="title">Job List</span>
         </a>
       </li>
-      <li class="root-level">
+      <li class="root-level" *ngIf="hasAccess([1, 2, 3])">
         <a href="/admin/add-vacancy">
           <i class="entypo-monitor"></i>
           <span class="title">Add Job</span>
         </a>
       </li>
-      <li class="root-level">
+      <li class="root-level" *ngIf="hasAccess([1, 2])">
         <a href="/admin/verify-employee">
-          <i class="entypo-users"></i>
+          <i class="entypo-vcard"></i>
           <span class="title">Verify-Applicant</span>
         </a>
       </li>
-      <li class="root-level dropdown">
+      <li class="root-level dropdown" *ngIf="hasAccess([1, 2, 3, 4])">
         <a href="" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
           <i class="entypo-flow-tree"></i>
           <span class="title">Masters</span>
         </a>
         <ul class="dropdown-menu">
-          <li>
+          <li *ngIf="hasAccess([1, 2, 3, 4])">
             <a href="/admin/group-division-list">Group Division List</a>
           </li>
-          <li>
+          <li *ngIf="hasAccess([1, 2, 3])">
             <a href="/admin/add-group-division">Add Group Division</a>
           </li>
-          <li>
+          <li *ngIf="hasAccess([1, 2, 3, 4])">
             <a href="/admin/zone-list">Zone List</a>
           </li>
-          <li>
+          <li *ngIf="hasAccess([1, 2, 3])">
             <a href="/admin/add-zone">Add Zone</a>
           </li>
-          <li>
+          <li *ngIf="hasAccess([1, 2, 3, 4])">
             <a href="/admin/project-list">Project List</a>
           </li>
-          <li>
+          <li *ngIf="hasAccess([1, 2, 3])">
             <a href="/admin/add-project">Add Project</a>
           </li>
-          <li>
+          <li *ngIf="hasAccess([1, 2, 3, 4])">
             <a href="/admin/designation-list">Designation List</a>
           </li>
-          <li>
+          <li *ngIf="hasAccess([1, 2, 3])">
             <a href="/admin/add-designation">Add Designation</a>
           </li>
-          <li>
+          <li *ngIf="hasAccess([1, 2, 3, 4])">
             <a href="/admin/sub-division-list">Sub Division List</a>
           </li>
-          <li>
+          <li *ngIf="hasAccess([1, 2, 3])">
             <a href="/admin/add-sub-division">Add Sub Division</a>
           </li>
-          <li>
+          <li *ngIf="hasAccess([1, 2, 3, 4])">
             <a href="/admin/step-master-list">Step List</a>
           </li>
-          <li>
+          <li *ngIf="hasAccess([1, 2, 3])">
             <a href="/admin/add-step-master">Add Step</a>
           </li>
         </ul>
