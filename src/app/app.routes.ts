@@ -31,6 +31,7 @@ import { StepMasterListComponent } from './Pages/admin/step-master-list/step-mas
 import { AddStepMasterComponent } from './Pages/admin/add-step-master/add-step-master.component';
 import { UserManagementComponent } from './Pages/admin/user-management/user-management.component';
 import { UserManagementListComponent } from './Pages/admin/user-management-list/user-management-list.component';
+import { InternshipApplicationComponent } from './Pages/home/internship-application/internship-application.component';
 
 export const routes: Routes = [
   {
@@ -43,6 +44,7 @@ export const routes: Routes = [
       { path: 'JobApplication', component: JobApplicationComponent },
       { path: 'JobApplicationIO', component: JobApplicationITOilComponent },
       { path: 'final-job-application-details', component: FinalJobApplicationDetailsComponent },
+      { path: 'internship-application', component: InternshipApplicationComponent },
     ]
   },
   { path: 'login', component: LoginComponent },

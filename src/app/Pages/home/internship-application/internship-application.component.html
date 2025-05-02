@@ -1,0 +1,154 @@
+<section class="bg-blue">
+  <div class="container">
+    <div class="row">
+      <div class="add-a-job-box">
+        <div *ngIf="submitted && !showFollowUp">
+          <form [formGroup]="personalForm" (ngSubmit)="onSubmitPersonalForm()">
+            <h5 class="text-center mb-4">Personal Details</h5>
+
+            <div class="mb-3 row">
+              <label for="inputName" class="col-sm-2 col-form-label">Full Name<br>(as per aadhar)<span class="text-danger">*</span></label>
+              <div class="col-sm-10">
+                <input type="text" formControlName="fullName" class="form-control" placeholder="Enter your name" id="inputName" required>
+                <span class="text-danger" *ngIf="f1['fullName'].invalid && f1['fullName'].touched">Name is required</span>
+              </div>
+            </div>
+
+            <div class="mb-3 row">
+              <label for="inputEmail" class="col-sm-2 col-form-label">Email ID<span class="text-danger">*</span></label>
+              <div class="col-sm-10">
+                <input type="email" formControlName="email" class="form-control" placeholder="Enter your email" id="inputEmail" required>
+                <span class="text-danger" *ngIf="f1['email'].invalid && f1['email'].touched">Valid email is required</span>
+              </div>
+            </div>
+
+            <div class="mb-3 row">
+              <label for="inputMobile" class="col-sm-2 col-form-label">Mobile Number<span class="text-danger">*</span></label>
+              <div class="col-sm-10">
+                <input type="text" formControlName="mobile" class="form-control" placeholder="10-digit mobile number" id="inputMobile" required>
+                <span class="text-danger" *ngIf="f1['mobile'].invalid && f1['mobile'].touched">Valid 10-digit mobile number required</span>
+              </div>
+            </div>
+
+            <div class="mb-3 row">
+              <label for="inputQualification" class="col-sm-2 col-form-label">Educational Qualification<span class="text-danger">*</span></label>
+              <div class="col-sm-6">
+                <input type="text" formControlName="qualification" class="form-control" placeholder="e.g., B.Tech" id="inputQualification" required />
+                <span class="text-danger" *ngIf="f1['qualification'].invalid && f1['qualification'].touched">Qualification is required</span>
+              </div>
+              <div class="col-sm-4">
+                <select formControlName="passingYear" class="form-control" required>
+                  <option value="" disabled>Select Year</option>
+                  <option *ngFor="let year of passingYears" [value]="year">{{ year }}</option>
+                </select>
+                <span class="text-danger" *ngIf="f1['passingYear'].invalid && f1['passingYear'].touched">
+                  Passing year is required
+                </span>
+              </div>
+            </div>
+
+
+            <div class="mb-3 row">
+              <label for="inputDepartment" class="col-sm-2 col-form-label">Preferred Department<span class="text-danger">*</span></label>
+              <div class="col-sm-10">
+                <select formControlName="department" class="form-select" id="inputDepartment" required>
+                  <option value="">Select Department</option>
+                  <option>Software Development</option>
+                  <option>Marketing</option>
+                  <option>Design</option>
+                  <option>HR</option>
+                  <option>Sales</option>
+                  <option>Other</option>
+                </select>
+                <span class="text-danger" *ngIf="f1['department'].invalid && f1['department'].touched">Department is required</span>
+              </div>
+            </div>
+
+            <div class="mb-3 row">
+              <label for="inputAvailability" class="col-sm-2 col-form-label">Internship Availability<span class="text-danger">*</span></label>
+              <div class="col-sm-10">
+                <select formControlName="availability" class="form-select" id="inputAvailability" required>
+                  <option value="">Select Availability</option>
+                  <option>Full-time</option>
+                  <option>Part-time</option>
+                </select>
+                <span class="text-danger" *ngIf="f1['availability'].invalid && f1['availability'].touched">Availability is required</span>
+              </div>
+            </div>
+            <div class="mb-3 row">
+              <label for="inputDurationValue" class="col-sm-2 col-form-label">
+                Internship Duration<span class="text-danger">*</span>
+              </label>
+              <div class="col-sm-5">
+                <input type="number" formControlName="durationValue" class="form-control" placeholder="e.g., 3" id="inputDurationValue" required />
+                <span class="text-danger" *ngIf="f1['durationValue'].invalid && f1['durationValue'].touched">
+                  Duration is required
+                </span>
+              </div>
+              <div class="col-sm-5">
+                <select formControlName="durationUnit" class="form-control" id="inputDurationUnit" required>
+                  <option value="" disabled>Select Unit</option>
+                  <option value="months">Month(s)</option>
+                  <option value="years">Year(s)</option>
+                </select>
+                <span class="text-danger" *ngIf="f1['durationUnit'].invalid && f1['durationUnit'].touched">
+                  Unit is required
+                </span>
+              </div>
+            </div>
+            <div class="mb-3 row">
+              <div class="col-sm-12 text-center">
+                <button class="submit_btn" type="submit">Next</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div *ngIf="showFollowUp && !submitted">
+          <form [formGroup]="followUpForm" (ngSubmit)="onSubmitFollowUpForm()">
+            <h5 class="text-center mb-4">Follow-Up Questions</h5>
+
+            <div class="mb-3 row">
+              <label for="inputDuration" class="col-sm-2 col-form-label"><strong>Question:</strong></label>
+              <div class="col-sm-10">
+                <div [innerHTML]="formattedQuestion"></div>
+              </div>
+            </div>
+
+            <div class="mb-3 row">
+              <label class="col-sm-2 col-form-label">Your Answer<span class="text-danger">*</span></label>
+              <div class="col-sm-10">
+                <textarea formControlName="answer" class="form-control" rows="3" placeholder="Type your answer here..."></textarea>
+                <span class="text-danger" *ngIf="f2['answer'].touched && f2['answer'].errors?.['required']">
+                  This field is required.
+                </span>
+                <span class="text-danger" *ngIf="f2['answer'].touched && f2['answer'].errors?.['minWords']">
+                  Please enter at least 10 words.
+                </span>
+              </div>
+            </div>
+
+            <div class="mb-3 row">
+              <div class="col-sm-12 text-center">
+                <button class="submit_btn" type="submit">Submit Answer</button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div *ngIf="showEvaluation && !showFollowUp && !submitted">
+          <div class="row">
+            <div class="col-md-6">
+              <h5 class="mb-3 text-success">Evaluation Summary</h5>
+            </div>
+            <div class="col-md-6 d-flex justify-content-end">
+              <button type="button" (click)="generatePdf()" class="btn me-2 pt-0">
+                <i class="entypo entypo-download fs-4 text-secondary"></i>
+              </button>
+            </div>
+          </div>
+          <pre style="white-space: pre-wrap;">{{ evaluationResult }}</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

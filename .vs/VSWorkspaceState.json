@@ -2,15 +2,7 @@
   "ExpandedNodes": [
     "",
     "\\src",
-    "\\src\\app",
-    "\\src\\app\\include",
-    "\\src\\app\\include\\adminheader",
-    "\\src\\app\\Pages",
-    "\\src\\app\\Pages\\admin",
-    "\\src\\app\\Pages\\login",
-    "\\src\\app\\Services",
-    "\\src\\app\\Services\\authentication"
+    "\\src\\environments"
   ],
-  "SelectedNode": "\\src\\app\\Pages\\login\\login.component.ts",
   "PreviewInSolutionExplorer": false
 }

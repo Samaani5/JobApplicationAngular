@@ -109,7 +109,7 @@ export class UserManagementComponent implements OnInit {
         zoneIds: selectedLocations,
         roleId: Number(this.userForm.value.role),
         createdBy: this.usession.emailAddress,
-        userPhoto: this.userForm.value.userPhoto,
+        userPhoto: this.userForm.value.userPhoto ? this.userForm.value.userPhoto : '',
         status: this.userForm.value.status
       }
       if (this.userForm.value.id == 0) {
