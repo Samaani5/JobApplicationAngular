@@ -34,7 +34,6 @@ export class InternshipApplicationComponent implements OnInit {
   evaluationResult: string = '';
   showEvaluation: boolean = false;
 
-
   constructor(private fb: FormBuilder, private http: HttpClient, private router: Router, private internservice: InternService) { }
 
   ngOnInit(): void {
@@ -92,7 +91,6 @@ export class InternshipApplicationComponent implements OnInit {
       }
     );
   }
-
   getNextQuestion(prompt: string = ''): void {
     if (this.questionIndex >= this.maxQuestions) {
       this.showFollowUp = false;
@@ -101,15 +99,12 @@ export class InternshipApplicationComponent implements OnInit {
       this.evaluateCandidate(evaluationPrompt);
       return;
     }
-
     this.internservice.generate(prompt).subscribe(
       (response: any) => {
-        // Check for success status (if status exists)
         if (response && response.status === 200) {
           try {
             let fullResponse = '';
             if (typeof response.body.response === 'string') {
-              // If the response is a string, assume newline-delimited JSON
               const lines = response.body.response.split('\n').filter(Boolean);
               for (const line of lines) {
                 try {
@@ -122,29 +117,20 @@ export class InternshipApplicationComponent implements OnInit {
                 }
               }
             } else if (response?.response) {
-              // If response is an object and has 'response' field
               fullResponse = response.response;
             }
-
             this.currentQuestion = fullResponse.trim();
-
-            // Match for the actual question
             const quotedQuestionMatch = fullResponse.match(/"([^"]+\?)"/s);
             const fallbackQuestionMatch = fullResponse.match(/^.*\?.*$/m);
-
             const parts = {
               question: quotedQuestionMatch?.[1]?.trim()
                 || fallbackQuestionMatch?.[0]?.trim()
                 || fullResponse.trim()
             };
-
-            // Clean the question text
             parts.question = parts.question.replace(/^\*+|\*+$/g, '').trim();
             parts.question = parts.question.replace(/^Question\s*\d+:\*\*\s*/i, '').trim();
             parts.question = parts.question.replace(/^Question:\*\*\s*/i, '').trim();
             parts.question = parts.question.replace(/^\d+\.\s*/, '').trim();
-
-            // Format and display the question
             this.formattedQuestion = `<p><strong> ${parts.question}</strong></p>`;
             this.questionText = parts.question;
             this.questionIndex++;
@@ -158,7 +144,6 @@ export class InternshipApplicationComponent implements OnInit {
           this.currentQuestion = 'Failed to load question';
           this.formattedQuestion = `<p>${this.currentQuestion}</p>`;
         }
-
         this.followUpForm.reset();
       },
       (error) => {
@@ -168,9 +153,6 @@ export class InternshipApplicationComponent implements OnInit {
       }
     );
   }
-
-
-
   onSubmitFollowUpForm(): void {
     if (this.followUpForm.invalid) return;
     const userAnswer = this.followUpForm.value.answer;
@@ -217,13 +199,9 @@ export class InternshipApplicationComponent implements OnInit {
       `If an answer is incorrect or irrelevant to the question, mark the response as failed and assign a score of 0 for that question.\n\n` +
       `For relevant answers, evaluate them based on the specified criteria and assign appropriate scores.\n\n` +
       `Then, complete the evaluation using the following scorecard format:\n\n`;
-
-    // Add dynamic Q&A list
     this.questionAnswerList.forEach((qa) => {
       prompt += `Question: ${qa.question}\nAnswer: ${qa.answer}\n`;
     });
-
-    // Continue with fixed format
     prompt += `\nParameter                   | Score (out of 5) | Comments\n` +
       `----------------------------|------------------|---------\n` +
       `Attitude & Motivation       |                  | \n` +
@@ -239,43 +217,48 @@ export class InternshipApplicationComponent implements OnInit {
       `Finally, provide a Recommendation Summary stating:\n\n` +
       `What kind of role the candidate might be best suited for.\n\n` +
       `What type of mentorship or support would help the candidate grow further.`;
-
     return prompt;
   }
   evaluateCandidate(prompt: string = ''): void {
-    this.http.post<any>('https://api.dil.in/api/generate', {
-      model: 'llama3.2',
-      prompt: prompt,
-    }, { responseType: 'text' as 'json' }).subscribe({
-      next: (response: any) => {
-        try {
-          let fullResponse = '';
-          if (typeof response === 'string') {
-            const lines = response.split('\n').filter(Boolean);
-            for (const line of lines) {
-              try {
-                const parsed = JSON.parse(line);
-                if (parsed?.response) {
-                  fullResponse += parsed.response;
+    this.internservice.generate(prompt).subscribe(
+      (response: any) => {
+        if (response && response.status === 200) {
+          try {
+            let fullResponse = '';
+            if (typeof response.body?.response === 'string') {
+              const lines = response.body.response.split('\n').filter(Boolean);
+              for (const line of lines) {
+                try {
+                  const parsed = JSON.parse(line);
+                  if (parsed?.response) {
+                    fullResponse += parsed.response;
+                  }
+                } catch (e) {
+                  console.warn('Skipping invalid JSON line:', line);
                 }
-              } catch (e) {
-                console.warn('Skipping invalid JSON line:', line);
               }
+            } else if (response?.response) {
+              fullResponse = response.response;
             }
-          } else {
-            fullResponse = response?.response || '';
+            this.evaluationResult = fullResponse.trim();
+            this.showEvaluation = true;
+          } catch (err) {
+            console.error('Error parsing evaluation response:', err);
+            this.evaluationResult = 'Evaluation parsing failed.';
+            this.showEvaluation = true;
           }
-          this.evaluationResult = fullResponse.trim();
+        } else {
+          console.error('Invalid response status or structure:', response);
+          this.evaluationResult = 'Evaluation failed due to invalid response.';
           this.showEvaluation = true;
-
-        } catch (err) {
-          console.error('Error parsing evaluation response:', err);
         }
       },
-      error: (err) => {
-        console.error('Evaluation failed:', err);
+      (error) => {
+        console.error('Evaluation failed:', error);
+        this.evaluationResult = 'Evaluation request failed.';
+        this.showEvaluation = true;
       }
-    });
+    );
   }
   minWordsValidator(minWords: number) {
     return (control: AbstractControl): ValidationErrors | null => {
